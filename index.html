@@ -2520,7 +2520,9 @@
 
         (function () {
             var mode = 'countdown', running = false, phase = 'work', skipping = false;
-            var elapsedMs = 0, remainingMs = 0, breakRemaining = 0, workSince = 0, lastTs = 0, tick = null, lastTotal = -1;
+            var elapsedMs = 0, remainingMs = 0, breakRemaining = 0, workSince = 0, lastTs = 0, tick = null, lastTotal = -1, catchUp = false, seenPhase = 'work';
+            function tChange() { try { window.dispatchEvent(new Event('timerchange')); } catch (e) { } }
+            window.__timer = { snap: function () { return { running: running, mode: mode, phase: phase, remainingMs: remainingMs, breakRemaining: breakRemaining, elapsedMs: elapsedMs, workSince: workSince, brk: opts.brk, every: opts.every, len: opts.len }; } };
             var opts = { brk: false, every: 25, len: 5, tick: false, amb: 'off', vol: 0.5 };
             try { var so = JSON.parse(localStorage.getItem('timerOpts')); if (so) for (var k in so) if (k in opts) opts[k] = so[k]; } catch (e) { }
 
@@ -2672,7 +2674,7 @@
                 var s = Math.min(59, Math.max(0, parseInt(inS.value) || 0));
                 return (h * 3600 + m * 60 + s) * 1000;
             }
-            function say(en, ar, bEn, bAr) { if (typeof notify === 'function') notify(L(en, ar), L(bEn, bAr)); }
+            function say(en, ar, bEn, bAr) { if (catchUp && window.fsPushOn) return; if (typeof notify === 'function') notify(L(en, ar), L(bEn, bAr)); }
 
             var ICON_MAX = '<path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>';
             var ICON_MIN = '<path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/>';
@@ -2685,7 +2687,7 @@
             focusBtn.addEventListener('click', function () { setFocus(!timerBox.classList.contains('focus')); });
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setFocus(false); });
 
-            function stop() { flushStudy(); running = false; clearInterval(tick); tick = null; startBtn.textContent = 'Start'; updateAmbient(); updatePhase(); }
+            function stop() { flushStudy(); running = false; clearInterval(tick); tick = null; startBtn.textContent = 'Start'; updateAmbient(); updatePhase(); tChange(); }
             function finish() {
                 remainingMs = 0; phase = 'work'; workSince = 0;
                 stop(); show(0); lastTotal = -1;
@@ -2718,8 +2720,9 @@
             }
             function loop() {
                 var now = Date.now(), dt = now - lastTs; lastTs = now;
-                advance(dt);
+                catchUp = dt > 4000; advance(dt); catchUp = false;
                 if (running) render();
+                if (phase !== seenPhase) { seenPhase = phase; tChange(); }
             }
             function start() {
                 ac(); clock.classList.remove('done');
@@ -2732,7 +2735,7 @@
                 inputs.classList.add('hidden');
                 setFocus(true);
                 tick = setInterval(loop, 100);
-                updateAmbient(); loop();
+                updateAmbient(); loop(); tChange();
             }
             function reset() {
                 stop(); setFocus(false); clock.classList.remove('done');
@@ -2747,13 +2750,13 @@
                     if (b.disabled) return;
                     lastTotal = -1;
                     skipping = true; advance(parseInt(b.getAttribute('data-skip')) * 60000); skipping = false;
-                    render();
+                    render(); tChange();
                 });
             });
             $('skipBreak').addEventListener('click', function () {
                 if (phase !== 'break') return;
                 breakRemaining = 0; phase = 'work'; workSince = 0; lastTotal = -1; chime('breakEnd');
-                render();
+                render(); tChange();
             });
             startBtn.addEventListener('click', function () { running ? stop() : start(); });
             resetBtn.addEventListener('click', reset);
@@ -3362,9 +3365,17 @@
             document.getElementById('nTime').value = nset.time;
             document.getElementById('nTask').checked = !!nset.task;
         }
-        function notify(title, body) {
+        function notify(title, body, tag) {
             if (!('Notification' in window) || Notification.permission !== 'granted') return;
-            try { new Notification(title, { body: body, dir: LANG === 'ar' ? 'rtl' : 'ltr', lang: LANG }); } catch (e) { }
+            var opts = { body: body, dir: LANG === 'ar' ? 'rtl' : 'ltr', lang: LANG, icon: 'icons/icon-192.png', badge: 'icons/icon-192.png' };
+            if (tag) opts.tag = tag;
+            /* Android Chrome and installed apps only allow notifications through the service worker */
+            if ('serviceWorker' in navigator && navigator.serviceWorker.getRegistration) {
+                navigator.serviceWorker.getRegistration().then(function (reg) {
+                    if (reg && reg.showNotification) reg.showNotification(title, opts);
+                    else { try { new Notification(title, opts); } catch (e) { } }
+                }).catch(function () { try { new Notification(title, opts); } catch (e) { } });
+            } else { try { new Notification(title, opts); } catch (e) { } }
         }
         function tasksMsg(n) {
             if (LANG === 'ar') return 'لديك ' + (n === 1 ? 'مهمة واحدة' : n === 2 ? 'مهمتان' : n <= 10 ? n + ' مهام' : n + ' مهمة') + ' يجب إنجازها اليوم';
@@ -3402,13 +3413,13 @@
             var n = todos.filter(function (t) { return !t.completed; }).length || p.length;
             if (nset.daily && hm >= nset.time && !fired['d|' + ds]) {
                 fired['d|' + ds] = 1;
-                if (n) notify(tasksMsg(n), randQuote());
+                if (n) notify(tasksMsg(n), randQuote(), 'd|' + ds);
             }
             if (nset.task) p.forEach(function (t) {
                 var key = 't|' + t.id + '|' + ds;
                 if (!t.time || hm < t.time || fired[key]) return;
                 fired[key] = 1;
-                if (mins(hm) - mins(t.time) <= 30) notify((LANG === 'ar' ? 'حان وقت: ' : 'Time for: ') + t.text, randQuote());
+                if (mins(hm) - mins(t.time) <= 30) notify((LANG === 'ar' ? 'حان وقت: ' : 'Time for: ') + t.text, randQuote(), key);
             });
             try { localStorage.setItem('notifFired', JSON.stringify(fired)); } catch (e) { }
         }
@@ -3786,11 +3797,13 @@
         applyLang(LANG);
         setTimeout(checkNotifs, 1500);
         setInterval(checkNotifs, 30000);
+        document.addEventListener('visibilitychange', function () { if (!document.hidden) checkNotifs(); });
     </script>
      <link rel="stylesheet" href="responsive.css">
     <link rel="stylesheet" href="appshell.css">
     <script src="auth.js"></script>
     <script src="appshell.js"></script>
+    <script src="push.js"></script>
 </body>
 
 </html>
