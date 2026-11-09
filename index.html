@@ -1,0 +1,3796 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Focusly</title>
+    <meta name="theme-color" content="#100b18">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Focusly">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+    <link rel="apple-touch-icon" href="icons/icon-180.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;600;700&family=Amiri:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root[data-theme="light"] {
+            --bg: #f5f1f5;
+            --surface: #fff;
+            --soft: #f0ecf2;
+            --text: rgb(45, 31, 51);
+            --muted: #796b85;
+            --border: #e0d5ee;
+            --accent: #7c3aed;
+            --accent-text: #fff;
+            --accent-hover: #6d28d9;
+            --shadow: 0 20px 60px rgba(60, 20, 110, .16);
+            --img-opacity: .12;
+            --clock-card: #f4f0fa;
+            --clock-card2: #e9e2f5;
+            --clock-digit: #2d1f33;
+            --clock-line: #cfc2e4
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #100b18;
+            --surface: #1d1626;
+            --soft: #2a2138;
+            --text: #f0ecf0;
+            --muted: #a897b8;
+            --border: #453a5c;
+            --accent: #8b5cf6;
+            --accent-text: #fff;
+            --accent-hover: #a78bfa;
+            --shadow: 0 20px 60px rgba(0, 0, 0, .6);
+            --img-opacity: .08;
+            --clock-card: #221a33;
+            --clock-card2: #160f24;
+            --clock-digit: #fff;
+            --clock-line: #000
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--text);
+            transition: background .3s, color .3s
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('premium_photo-1683309568772-57011d6c1b7b.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: var(--img-opacity);
+            z-index: 0
+        }
+
+        .container {
+            background: var(--surface);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 1000px;
+            max-height: 96vh;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+            animation: slideIn .5s ease-out;
+            transition: background .3s
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .header {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px
+        }
+
+        .header-tools {
+            display: flex;
+            gap: 8px;
+            justify-self: end
+        }
+
+        .lang-btn {
+            height: 46px;
+            padding: 0 16px;
+            border-radius: 23px;
+            border: 2px solid var(--border);
+            background: var(--soft);
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .3s
+        }
+
+        .lang-btn:hover {
+            border-color: var(--accent)
+        }
+
+        .header-text {
+            text-align: center;
+            flex: 1
+        }
+
+        h1 {
+            font-size: 2.3em;
+            margin-bottom: 6px;
+            font-weight: 700
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: .95em
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--soft);
+            color: var(--text);
+            font-size: 22px;
+            cursor: pointer;
+            transition: all .3s;
+            flex-shrink: 0
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent)
+        }
+
+        .header::before {
+            content: '';
+            width: 46px;
+            flex-shrink: 0
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px
+        }
+
+        .tab-btn,
+        .filter-btn,
+        .priority-btn,
+        .sort-btn,
+        .mode-btn {
+            background: var(--surface);
+            color: var(--text);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all .3s;
+            font-weight: 600
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 15px
+        }
+
+        .tab-btn:hover,
+        .filter-btn:hover,
+        .sort-btn:hover,
+        .priority-btn:hover,
+        .mode-btn:hover {
+            border-color: var(--accent)
+        }
+
+        .tab-btn.active,
+        .filter-btn.active,
+        .priority-btn.active,
+        .mode-btn.active {
+            background: var(--accent);
+            color: var(--accent-text);
+            border-color: var(--accent)
+        }
+
+        .tab-panel {
+            display: none
+        }
+
+        .tab-panel.active {
+            display: block
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--soft);
+            border-radius: 12px
+        }
+
+        .stat {
+            text-align: center
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold
+        }
+
+        .stat-label {
+            font-size: .85em;
+            color: var(--muted);
+            margin-top: 2px
+        }
+
+        input[type=text],
+        input[type=number],
+        select {
+            background: var(--surface);
+            color: var(--text);
+            border: 2px solid var(--border);
+            outline: none;
+            transition: all .3s;
+            font-family: inherit
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--accent)
+        }
+
+        ::placeholder {
+            color: var(--muted)
+        }
+
+        .icon {
+            width: 1em;
+            height: 1em;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            vertical-align: -.125em;
+            flex-shrink: 0
+        }
+
+        h1 .icon {
+            width: .85em;
+            height: .85em;
+            margin-inline-end: 6px
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            position: relative
+        }
+
+        .search-icon {
+            position: absolute;
+            inset-inline-start: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            pointer-events: none;
+            width: 18px;
+            height: 18px
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px;
+            padding-inline: 44px 20px;
+            border-radius: 12px;
+            font-size: 14px
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px
+        }
+
+        #todoInput {
+            flex: 1;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 16px
+        }
+
+        .priority-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .priority-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px
+        }
+
+        .label-muted {
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center
+        }
+
+        .btn-add {
+            background: var(--accent);
+            color: var(--accent-text)
+        }
+
+        .btn-add:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px)
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px
+        }
+
+        .filter-btn {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px
+        }
+
+        .sort-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center
+        }
+
+        .sort-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px
+        }
+
+        .todo-list {
+            list-style: none;
+            max-height: 420px;
+            overflow-y: auto
+        }
+
+        .todo-list::-webkit-scrollbar,
+        .container::-webkit-scrollbar {
+            width: 8px
+        }
+
+        .todo-list::-webkit-scrollbar-track,
+        .container::-webkit-scrollbar-track {
+            background: var(--soft);
+            border-radius: 10px
+        }
+
+        .todo-list::-webkit-scrollbar-thumb,
+        .container::-webkit-scrollbar-thumb {
+            background: var(--muted);
+            border-radius: 10px
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--surface);
+            border: 2px solid var(--soft);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: all .3s;
+            animation: fadeIn .3s ease-out
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0)
+            }
+        }
+
+        .todo-item:hover {
+            border-color: var(--accent)
+        }
+
+        .todo-item.completed {
+            opacity: .55;
+            background: var(--soft)
+        }
+
+        .todo-item.priority-high {
+            border-inline-end: 4px solid #e74c3c
+        }
+
+        .todo-item.priority-medium {
+            border-inline-end: 4px solid #f39c12
+        }
+
+        .todo-item.priority-low {
+            border-inline-end: 4px solid #8b5cf6
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--muted);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s;
+            flex-shrink: 0
+        }
+
+        .checkbox:hover {
+            border-color: var(--accent)
+        }
+
+        .checkbox.checked {
+            background: var(--accent);
+            border-color: var(--accent)
+        }
+
+        .checkbox.checked::after {
+            content: '';
+            width: 14px;
+            height: 14px;
+            background: var(--accent-text);
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/contain no-repeat
+        }
+
+        .todo-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0
+        }
+
+        .todo-text {
+            font-size: 16px;
+            word-break: break-word
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: var(--muted)
+        }
+
+        .todo-meta {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 8px
+        }
+
+        .btn-edit,
+        .btn-delete {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all .3s;
+            font-size: 14px;
+            flex-shrink: 0
+        }
+
+        .btn-edit {
+            background: var(--accent);
+            color: var(--accent-text)
+        }
+
+        .btn-delete {
+            background: var(--soft);
+            color: var(--text)
+        }
+
+        .btn-edit:hover,
+        .btn-delete:hover {
+            transform: scale(1.05)
+        }
+
+        .btn-clear {
+            width: 100%;
+            margin-top: 20px;
+            background: var(--soft);
+            color: var(--text)
+        }
+
+        .btn-clear:hover {
+            transform: translateY(-2px)
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--muted)
+        }
+
+        .empty-state-icon {
+            font-size: 3.2em;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center
+        }
+
+        .empty-state-icon .icon {
+            stroke-width: 1.5
+        }
+
+        .empty-state-text {
+            font-size: 1.15em;
+            margin-bottom: 4px
+        }
+
+        .timer-box {
+            background: var(--soft);
+            border-radius: 16px;
+            padding: 28px 20px
+        }
+
+        .mode-switch {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 24px
+        }
+
+        .mode-btn {
+            padding: 9px 22px;
+            font-size: 14px;
+            border-radius: 8px
+        }
+
+        .flip-clock {
+            display: flex;
+            justify-content: center;
+            gap: clamp(8px, 2vw, 22px);
+            direction: ltr
+        }
+
+        .flip-card {
+            position: relative;
+            flex: 1;
+            max-width: 260px;
+            aspect-ratio: 3/4;
+            max-height: 34vh;
+            border-radius: 10px;
+            background: linear-gradient(var(--clock-card), var(--clock-card2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            perspective: 600px
+        }
+
+        .flip-card::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 3px;
+            margin-top: -1px;
+            background: var(--clock-line)
+        }
+
+        .flip-digit {
+            font-family: 'Bebas Neue', 'League Gothic', Impact, 'Arial Narrow', sans-serif;
+            font-size: clamp(70px, 14vw, 190px);
+            line-height: 1;
+            color: var(--clock-digit);
+            letter-spacing: 2px
+        }
+
+        .flip-digit.flip {
+            animation: flip .45s ease-out
+        }
+
+        @keyframes flip {
+            0% {
+                transform: rotateX(0);
+                opacity: 1
+            }
+
+            45% {
+                transform: rotateX(-80deg);
+                opacity: .2
+            }
+
+            55% {
+                transform: rotateX(80deg);
+                opacity: .2
+            }
+
+            100% {
+                transform: rotateX(0);
+                opacity: 1
+            }
+        }
+
+        .flip-clock.done .flip-digit {
+            animation: blink 1s steps(2) infinite
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: .15
+            }
+        }
+
+        .time-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 22px;
+            direction: ltr
+        }
+
+        .time-inputs.hidden {
+            display: none
+        }
+
+        .time-inputs label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .time-inputs input {
+            width: 80px;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 8px
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 22px
+        }
+
+        .btn-start {
+            background: var(--accent);
+            color: var(--accent-text)
+        }
+
+        .btn-start:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px)
+        }
+
+        .btn-reset {
+            background: var(--surface);
+            color: var(--text);
+            border: 2px solid var(--border)
+        }
+
+        .btn-reset:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px)
+        }
+
+        .session {
+            margin-top: 22px;
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 20px
+        }
+
+        .session-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px
+        }
+
+        .session-head h2 {
+            font-size: 1.1em
+        }
+
+        .session-count {
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .progress {
+            height: 8px;
+            background: var(--soft);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 14px
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            border-radius: 8px;
+            transition: width .4s
+        }
+
+        .session-add {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px
+        }
+
+        .session-add input[type=text] {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px
+        }
+
+        .session-add select {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            min-width: 0
+        }
+
+        .btn-small {
+            padding: 10px 18px;
+            font-size: 14px;
+            border-radius: 10px;
+            background: var(--accent);
+            color: var(--accent-text)
+        }
+
+        .btn-small:hover {
+            background: var(--accent-hover)
+        }
+
+        .session-list {
+            list-style: none;
+            margin-top: 12px;
+            max-height: 220px;
+            overflow-y: auto
+        }
+
+        .session-list::-webkit-scrollbar {
+            width: 8px
+        }
+
+        .session-list::-webkit-scrollbar-thumb {
+            background: var(--soft);
+            border-radius: 4px
+        }
+
+        .session-list::-webkit-scrollbar-thumb:hover {
+            background: var(--accent)
+        }
+
+        .session-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border: 2px solid var(--soft);
+            border-radius: 10px;
+            margin-bottom: 8px
+        }
+
+        .session-item.completed .todo-text {
+            text-decoration: line-through;
+            color: var(--muted)
+        }
+
+        .session-item .todo-text {
+            flex: 1;
+            font-size: 15px
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 1
+        }
+
+        .remove-btn:hover {
+            color: var(--text)
+        }
+
+        .session-done {
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+            padding: 6px
+        }
+
+        .timer-box.focus {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            background: var(--bg);
+            padding: 24px;
+            overflow: hidden;
+            animation: zoomIn .35s ease-out
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(.96)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+        .timer-box.focus .mode-switch,
+        .timer-box.focus .time-inputs,
+        .timer-box.focus .session-add,
+        .timer-box.focus .progress {
+            display: none
+        }
+
+        .timer-box.focus .flip-clock {
+            width: 100%;
+            max-width: 1100px
+        }
+
+        .timer-box.focus .flip-card {
+            max-width: 30vw;
+            max-height: 54vh
+        }
+
+        .timer-box.focus .flip-digit {
+            font-size: clamp(80px, min(20vw, 38vh), 420px)
+        }
+
+        .timer-box.focus .timer-controls {
+            margin-top: 0
+        }
+
+        .timer-box.focus .session {
+            width: 100%;
+            max-width: 520px;
+            margin-top: 0;
+            padding: 12px 16px;
+            background: var(--soft)
+        }
+
+        .timer-box.focus .session.is-empty {
+            display: none
+        }
+
+        .timer-box.focus .session-head {
+            margin-bottom: 6px
+        }
+
+        .timer-box.focus .session-head h2 {
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .timer-box.focus .session-count {
+            font-size: 12px
+        }
+
+        .timer-box.focus .session-list {
+            max-height: 20vh;
+            margin-top: 0
+        }
+
+        .timer-box.focus .session-item {
+            padding: 6px 10px;
+            margin-bottom: 6px;
+            gap: 10px;
+            background: var(--surface)
+        }
+
+        .timer-box.focus .session-item .todo-text {
+            font-size: 13px
+        }
+
+        .timer-box.focus .checkbox {
+            width: 20px;
+            height: 20px
+        }
+
+        body.focus-mode #chatbot-widget {
+            display: none
+        }
+
+        .tr-langs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 14px
+        }
+
+        .tr-langs select {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px
+        }
+
+        .swap-btn,
+        .icon-btn {
+            border: 2px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: all .3s
+        }
+
+        .swap-btn {
+            width: 44px;
+            height: 44px;
+            font-size: 18px
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            font-size: 17px
+        }
+
+        .swap-btn:hover,
+        .icon-btn:hover {
+            border-color: var(--accent)
+        }
+
+        #trInput {
+            width: 100%;
+            min-height: 110px;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            resize: vertical;
+            background: var(--surface);
+            color: var(--text);
+            border: 2px solid var(--border);
+            outline: none;
+            font-family: inherit;
+            transition: border-color .3s
+        }
+
+        #trInput:focus {
+            border-color: var(--accent)
+        }
+
+        .tr-actions {
+            display: flex;
+            gap: 10px;
+            margin: 14px 0
+        }
+
+        .tr-actions .btn {
+            padding: 13px 26px
+        }
+
+        .tr-result {
+            background: var(--soft);
+            border-radius: 14px;
+            padding: 20px;
+            display: none
+        }
+
+        .tr-result.show {
+            display: block
+        }
+
+        .tr-block {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            justify-content: space-between
+        }
+
+        .tr-block+.tr-block {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border)
+        }
+
+        .tr-main {
+            flex: 1;
+            min-width: 0
+        }
+
+        .tr-lang {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 4px
+        }
+
+        .tr-text {
+            font-size: 1.6em;
+            font-weight: 600;
+            word-break: break-word
+        }
+
+        .tr-src .tr-text {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: var(--muted)
+        }
+
+        .tr-pron {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 15px;
+            direction: ltr;
+            text-align: left
+        }
+
+        .tr-tools {
+            display: flex;
+            gap: 6px
+        }
+
+        .voice-panel {
+            display: none;
+            background: var(--soft);
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 14px
+        }
+
+        .voice-panel.show {
+            display: block
+        }
+
+        .voice-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px
+        }
+
+        .voice-row label {
+            width: 70px;
+            font-size: 14px;
+            color: var(--muted);
+            flex-shrink: 0
+        }
+
+        .voice-row input[type=range] {
+            flex: 1;
+            accent-color: var(--accent);
+            cursor: pointer
+        }
+
+        .voice-row select {
+            flex: 1;
+            min-width: 0;
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-size: 14px
+        }
+
+        .voice-row output {
+            width: 44px;
+            text-align: end;
+            font-size: 14px;
+            font-variant-numeric: tabular-nums
+        }
+
+        .voice-foot {
+            display: flex;
+            justify-content: flex-end
+        }
+
+        .voice-foot .btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 10px
+        }
+
+        .tr-status {
+            color: var(--muted);
+            font-size: 14px;
+            text-align: center;
+            padding: 8px
+        }
+
+        :root[data-theme="dark"] {
+            color-scheme: dark
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit
+        }
+
+        :root[lang="ar"] body {
+            font-family: 'Cairo', 'Tajawal', 'Segoe UI', Tahoma, sans-serif
+        }
+
+        input[type=time] {
+            background: var(--surface);
+            color: var(--text);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 10px;
+            font-size: 14px;
+            outline: none
+        }
+
+        input[type=time]:focus {
+            border-color: var(--accent)
+        }
+
+        .btn-ghost {
+            background: var(--surface) !important;
+            color: var(--text) !important;
+            border: 2px solid var(--border)
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--accent)
+        }
+
+        .quote-card {
+            background: var(--soft);
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            text-align: center;
+            position: relative
+        }
+
+        .quote-label {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 8px
+        }
+
+        .q-ar {
+            font-family: 'Amiri', 'Cairo', serif;
+            font-size: 1.65em;
+            line-height: 2;
+            font-weight: 700
+        }
+
+        .q-tip {
+            font-size: 1.25em;
+            line-height: 1.8;
+            font-weight: 600
+        }
+
+        .q-src {
+            font-size: 14px;
+            color: var(--muted);
+            margin-top: 4px
+        }
+
+        .q-en {
+            font-size: 14px;
+            color: var(--muted);
+            margin-top: 6px;
+            direction: ltr
+        }
+
+        .quote-card .btn {
+            margin: 14px auto 0;
+            padding: 8px 18px;
+            font-size: 13px;
+            border-radius: 10px
+        }
+
+        .notif-box {
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 18px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .notif-top {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px
+        }
+
+        .notif-top .label-muted {
+            flex: 1;
+            min-width: 200px
+        }
+
+        .chk {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            flex-wrap: wrap
+        }
+
+        .chk input[type=checkbox] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            cursor: pointer
+        }
+
+        .sch-add {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px
+        }
+
+        .sch-add select {
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 14px
+        }
+
+        .sch-add input[type=text] {
+            flex: 1;
+            min-width: 180px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px
+        }
+
+        .sch-wrap {
+            overflow-x: auto;
+            border: 2px solid var(--border);
+            border-radius: 14px
+        }
+
+        .sch-table {
+            width: 100%;
+            min-width: 760px;
+            border-collapse: collapse;
+            table-layout: fixed
+        }
+
+        .sch-table th {
+            background: var(--accent);
+            color: var(--accent-text);
+            padding: 12px 8px;
+            font-size: 14px;
+            font-weight: 700
+        }
+
+        .sch-table th.today small {
+            display: block;
+            font-size: 11px;
+            font-weight: 400;
+            opacity: .8
+        }
+
+        .sch-table td {
+            border: 1px solid var(--border);
+            padding: 8px;
+            vertical-align: top;
+            height: 58px
+        }
+
+        .sch-table td.today {
+            background: var(--soft)
+        }
+
+        .sch-table tfoot td {
+            height: auto;
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            padding: 8px
+        }
+
+        .sch-task {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px
+        }
+
+        .sch-task .checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 1px
+        }
+
+        .sch-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px
+        }
+
+        .sch-info .todo-text {
+            font-size: 13px
+        }
+
+        .sch-time {
+            font-size: 11px;
+            color: var(--muted);
+            direction: ltr;
+            text-align: start
+        }
+
+        .sch-task.done .todo-text {
+            text-decoration: line-through;
+            color: var(--muted)
+        }
+
+        .sch-task .remove-btn {
+            font-size: 16px
+        }
+
+        .sch-table {
+            min-width: 0;
+            table-layout: auto
+        }
+
+        .sch-table th.day {
+            width: 110px;
+            text-align: start;
+            padding: 14px 12px;
+            vertical-align: middle
+        }
+
+        .sch-table td {
+            height: auto;
+            vertical-align: middle;
+            padding: 10px
+        }
+
+        .sch-table td.count {
+            width: 90px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .sch-table td.none {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .sch-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center
+        }
+
+        .sch-task {
+            align-items: center;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 6px 10px;
+            background: var(--surface)
+        }
+
+        .sch-task .checkbox {
+            margin-top: 0
+        }
+
+        .sch-info {
+            flex-direction: row;
+            align-items: center;
+            gap: 8px
+        }
+
+        .sch-task.done {
+            opacity: .6
+        }
+
+        .session-src {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .src-btn {
+            padding: 7px 14px;
+            font-size: 13px;
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text);
+            border: 2px solid var(--border);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .3s
+        }
+
+        .src-btn:hover {
+            border-color: var(--accent)
+        }
+
+        .src-btn.active {
+            background: var(--accent);
+            color: var(--accent-text);
+            border-color: var(--accent)
+        }
+
+        .session-src select {
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-size: 13px
+        }
+
+        .timer-box.focus .session-src {
+            display: none
+        }
+
+        .skip-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap
+        }
+
+        .btn-chip {
+            padding: 8px 14px;
+            font-size: 13px;
+            border-radius: 10px
+        }
+
+        .btn:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+            transform: none !important
+        }
+
+        .timer-box.focus .skip-row {
+            margin-top: 0
+        }
+
+        .phase {
+            text-align: center;
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 14px;
+            color: var(--muted)
+        }
+
+        .phase:empty {
+            display: none
+        }
+
+        .phase.break {
+            color: var(--text)
+        }
+
+        .timer-box.focus .phase {
+            font-size: 20px;
+            margin-bottom: 0
+        }
+
+        .timer-opts {
+            margin-top: 22px;
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .timer-box.focus .timer-opts {
+            display: none
+        }
+
+        .opt-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap
+        }
+
+        .opt-inline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px
+        }
+
+        .opt-inline input {
+            width: 70px;
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 15px
+        }
+
+        .opt-inline input:disabled {
+            opacity: .45
+        }
+
+        .opt-row select {
+            padding: 9px 12px;
+            border-radius: 10px;
+            font-size: 14px
+        }
+
+        .opt-lbl {
+            font-size: 14px
+        }
+
+        #optVol {
+            width: 140px;
+            accent-color: var(--accent);
+            cursor: pointer
+        }
+
+        @media(max-width:600px) {
+            .sch-table th.day {
+                width: 76px;
+                padding: 10px 6px;
+                font-size: 13px
+            }
+
+            .sch-table td.count {
+                display: none
+            }
+        }
+
+        @media(max-width:600px) {
+            .container {
+                padding: 22px
+            }
+
+            .time-inputs input {
+                width: 64px
+            }
+
+            .session-add {
+                flex-direction: column
+            }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+
+            .flip-digit.flip,
+            .container,
+            .todo-item {
+                animation: none
+            }
+        }
+
+        /* ===== Statistics tab ===== */
+        .st-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px }
+        .st-card { background: var(--soft); border-radius: 12px; padding: 16px; text-align: center }
+        .st-val { font-size: 1.6em; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere }
+        .st-lbl { font-size: .85em; color: var(--muted); margin-top: 4px }
+        .st-bar { height: 8px; border-radius: 99px; background: var(--border); overflow: hidden; margin-top: 10px }
+        .st-bar>i { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .5s }
+        .st-chart-box { background: var(--soft); border-radius: 12px; padding: 16px }
+        .st-head { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin-bottom: 12px }
+        .st-head h3 { font-size: 1.05em }
+        .st-seg { display: flex; gap: 6px; flex-wrap: wrap }
+        .st-b { background: var(--surface); color: var(--text); border: 2px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 600; font-family: inherit; transition: all .3s; padding: 8px 14px; font-size: 13px }
+        .st-b:hover { border-color: var(--accent) }
+        .st-b.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent) }
+        .st-svg { width: 100%; height: auto; display: block; direction: ltr }
+        .st-note { color: var(--muted); font-size: .8em; margin-top: 10px; text-align: center }
+        /* ===== Subjects, planner, overdue ===== */
+        .tk-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 15px }
+        .tk-row select, .tk-row input, .pl-row input, #sjName { background: var(--surface); color: var(--text); border: 2px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 14px; font-family: inherit; outline: none }
+        .tk-row label { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px }
+        .chip { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; border: 1.5px solid var(--border); margin-inline-start: 6px; color: var(--muted) }
+        .chip.late { border-color: #e74c3c; color: #e74c3c }
+        .od-box { border: 2px solid #e74c3c; border-radius: 12px; padding: 12px 14px; margin-bottom: 15px; font-size: 14px; overflow-wrap: anywhere }
+        .sj-card { background: var(--soft); border-radius: 12px; padding: 14px; margin-bottom: 12px; border-inline-start: 6px solid var(--accent) }
+        .sj-head { display: flex; gap: 10px; align-items: center; margin-bottom: 8px }
+        .sj-head b { flex: 1; overflow-wrap: anywhere }
+        .sj-stat { color: var(--muted); font-size: 13px }
+        .sj-notes { width: 100%; min-height: 90px; resize: vertical; background: var(--surface); color: var(--text); border: 2px solid var(--border); border-radius: 10px; padding: 10px; font-family: inherit; font-size: 14px; outline: none }
+        .sj-notes:focus { border-color: var(--accent) }
+        .sj-links a { display: block; font-size: 13px; color: var(--text); text-decoration: underline; overflow-wrap: anywhere; margin-top: 4px }
+        #sjColor { width: 48px; height: 46px; padding: 2px; border-radius: 10px; border: 2px solid var(--border); background: var(--surface); cursor: pointer; flex: none }
+        .pl-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 }
+        .pl-row label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); flex: 1 1 110px }
+        .pl-day { margin-top: 12px; font-weight: 700; font-size: 14px }
+        .pl-it { font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap }
+        .pl-it time { color: var(--muted); min-width: 46px }
+        .st-sub { font-size: .75em; color: var(--muted); margin-top: 2px }
+        .sj-quiz { margin-top: 12px }
+        .qz { margin-top: 12px }
+        .qz-q { font-weight: 600; font-size: 14px; margin-bottom: 6px; overflow-wrap: anywhere }
+        .qz-o { display: block; width: 100%; text-align: start; margin-top: 6px; padding: 9px 12px; border-radius: 10px; border: 2px solid var(--border); background: var(--surface); color: var(--text); font-family: inherit; font-size: 13px; cursor: pointer }
+        .qz-o:hover:not(:disabled) { border-color: var(--accent) }
+        .qz-o.right { border-color: #2ecc71 }
+        .qz-o.wrong { border-color: #e74c3c }
+        .st-b:disabled { opacity: .5; cursor: wait }
+
+        /* ===== App screens: launch, loading, error ===== */
+        .fs-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 4000;
+            background: radial-gradient(130% 100% at 50% 0%, #43218a 0%, #241049 55%, #120a26 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden
+        }
+
+        .fs-screen[hidden] {
+            display: none
+        }
+
+        .fs-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block
+        }
+
+        @media (min-width: 768px), (orientation: landscape) {
+            .fs-screen img {
+                width: auto;
+                height: auto;
+                max-width: 92vw;
+                max-height: 88vh;
+                object-fit: contain
+            }
+        }
+
+        #fsError {
+            z-index: 6000
+        }
+
+        .fs-screen.hide {
+            opacity: 0;
+            transition: opacity .5s;
+            pointer-events: none
+        }
+
+        .fs-err-box {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: max(28px, env(safe-area-inset-bottom));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 0 20px
+        }
+
+        .fs-err-msg {
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, .6)
+        }
+
+        .fs-err-btns {
+            display: flex;
+            gap: 10px
+        }
+
+        .fs-retry,
+        .fs-close {
+            padding: 11px 26px;
+            border-radius: 12px;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer
+        }
+
+        .fs-retry {
+            background: var(--accent);
+            color: var(--accent-text)
+        }
+
+        .fs-close {
+            background: rgba(255, 255, 255, .16);
+            color: #fff;
+            border: 1.5px solid rgba(255, 255, 255, .4)
+        }
+
+        .logo-img {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            border-radius: 13px;
+            vertical-align: middle;
+            margin-inline-end: 10px;
+            flex: none
+        }
+
+        .app-footer {
+            margin-top: 26px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ===== App screens: launch -> animated loading -> app; error with Back / Main menu ===== -->
+    <div class="fs-screen" id="fsLaunch" style="z-index:4100"><img src="lunchscreen.png" alt="Focusly"></div>
+    <div class="fs-screen" id="fsLoading" role="status" aria-live="polite">
+        <div class="fs-stage">
+            <img src="loadingscreen-clean.png" alt="">
+            <div class="ld-glow"></div>
+            <div class="ld-bar"><i></i></div>
+        </div>
+    </div>
+    <div class="fs-screen" id="fsError" hidden role="alertdialog" aria-modal="true" aria-labelledby="fsErrMsg">
+        <div class="fs-err-art"><img src="errorscreen.png" alt=""></div>
+        <div class="fs-err-box">
+            <div class="fs-err-msg" id="fsErrMsg"></div>
+            <button class="fs-retry" id="fsRetry" type="button">Try again</button>
+            <div class="fs-err-btns">
+                <button class="fs-close" id="fsBack" type="button">Back</button>
+                <button class="fs-close" id="fsHome" type="button">Main menu</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            var $ = function (id) { return document.getElementById(id); };
+            var launch = $('fsLaunch'), loading = $('fsLoading'), error = $('fsError'), errMsg = $('fsErrMsg');
+            function isAr() {
+                if (document.documentElement.getAttribute('lang') === 'ar') return true;
+                try { return localStorage.getItem('lang') === 'ar'; } catch (e) { return false; }
+            }
+            function tx(en, ar) { return isAr() ? ar : en; }
+            var NET_EN = 'No connection. Check your internet and try again.', NET_AR = 'لا يوجد اتصال. تأكد من الإنترنت وأعد المحاولة.';
+
+            /* --- show / hide with fade --- */
+            function hideEl(el) {
+                el.classList.add('hide');
+                clearTimeout(el._t);
+                el._t = setTimeout(function () { el.hidden = true; }, 520);
+            }
+            function showEl(el) {
+                clearTimeout(el._t);
+                el.hidden = false; el.classList.remove('hide');
+            }
+
+            /* --- boot: launch screen -> animated loading screen -> app --- */
+            var booted = false;
+            try { booted = sessionStorage.getItem('booted') === '1'; sessionStorage.setItem('booted', '1'); } catch (e) { }
+            var LAUNCH_MS = 1500, LOAD_MIN = booted ? 700 : 1800;
+            var appReady = false, launchDone = booted, loadingFrom = Date.now(), bootClosed = false;
+
+            function tryFinishBoot() {
+                if (bootClosed || !appReady || !launchDone) return;
+                bootClosed = true;
+                setTimeout(function () { hideEl(loading); }, Math.max(0, LOAD_MIN - (Date.now() - loadingFrom)));
+            }
+            if (booted) { launch.hidden = true; }
+            else {
+                setTimeout(function () {
+                    hideEl(launch);                 /* reveals the loading screen underneath */
+                    launchDone = true; loadingFrom = Date.now(); tryFinishBoot();
+                }, LAUNCH_MS);
+            }
+            window.ready = function () { appReady = true; tryFinishBoot(); };   /* called by auth.js */
+            setTimeout(window.ready, 7000);                                      /* safety: never get stuck */
+
+ 
+            /* --- loading overlay on demand (used by auth.js while logging in / signing up) --- */
+            window.fsLoading = function (on) {
+                if (on) { showEl(loading); }
+                else { hideEl(loading); }
+            };
+
+            /* --- screen history, so "Back" returns to the previous screen --- */
+            var stack = ['tasksTab'];
+            document.addEventListener('click', function (e) {
+                var b = e.target && e.target.closest && e.target.closest('.tab-btn');
+                if (!b) return;
+                var id = b.getAttribute('data-tab');
+                if (stack[stack.length - 1] !== id) { stack.push(id); if (stack.length > 20) stack.shift(); }
+            }, true);
+            function goTab(id) { var b = document.querySelector('.tab-btn[data-tab="' + id + '"]'); if (b) b.click(); }
+            function leaveZoom() {
+                if (document.body.classList.contains('focus-mode'))
+                    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+            }
+            function closeError() { error.hidden = true; }
+
+            /* --- error screen --- */
+            window.fsError = function (msg) {
+                bootClosed = true; hideEl(launch); loading.hidden = true;
+                errMsg.textContent = msg || tx('Something went wrong. Check your connection, then try again or go back.',
+                    'حدث خطأ. تأكد من الاتصال ثم أعد المحاولة أو ارجع للخلف.');
+                $('fsRetry').textContent = tx('Try again', 'أعد المحاولة');
+                $('fsBack').textContent = tx('Back', 'رجوع');
+                $('fsHome').textContent = tx('Main menu', 'القائمة الرئيسية');
+                showEl(error);
+                try { $('fsRetry').focus(); } catch (e) { }
+            };
+            $('fsRetry').addEventListener('click', function () { location.reload(); });
+            $('fsBack').addEventListener('click', function () {
+                closeError(); leaveZoom();
+                if (stack.length > 1) stack.pop();
+                goTab(stack[stack.length - 1] || 'tasksTab');
+            });
+            $('fsHome').addEventListener('click', function () {
+                closeError(); leaveZoom();
+                stack = ['tasksTab']; goTab('tasksTab');
+                var t = document.querySelector('.container'); if (t) t.scrollTop = 0;
+            });
+
+            /* real errors only: ignore harmless browser noise, keep technical text out of the UI */
+            window.addEventListener('error', function (e) {
+                if (!e || !e.message || /ResizeObserver|Script error/i.test(e.message)) return;
+                if (window.console) console.error(e.message);
+                if (error.hidden) window.fsError();
+            });
+            window.addEventListener('unhandledrejection', function (e) {
+                var m = String((e && e.reason && e.reason.message) || (e && e.reason) || '');
+                if (/failed to fetch|networkerror|load failed|network request failed/i.test(m) && error.hidden) window.fsError(tx(NET_EN, NET_AR));
+            });
+        })();
+    </script>
+    <div class="container">
+        <div class="header">
+            <div class="header-text">
+                <h1><img class="logo-img" src="logo.png" alt="Focusly logo">Focusly</h1>
+                <p class="subtitle">Plan what to study, then focus with the timer</p>
+            </div>
+            <div class="header-tools"><button class="lang-btn" id="langBtn" title="Language"
+                    aria-label="Language">EN</button><button class="theme-toggle" id="themeToggle"
+                    title="Switch light / dark" aria-label="Switch light or dark theme"><svg class="icon"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4" />
+                        <path
+                            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                    </svg></button></div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="tasksTab">Study Tasks</button>
+            <button class="tab-btn" data-tab="timerTab">Timer</button>
+            <button class="tab-btn" data-tab="translateTab">Translator</button>
+            <button class="tab-btn" data-tab="scheduleTab">Schedule</button>
+            <button class="tab-btn" data-tab="statsTab">Statistics</button>
+            <button class="tab-btn" data-tab="subjTab">Subjects</button>
+        </div>
+
+        <div class="tab-panel active" id="tasksTab">
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="totalTasks">0</div>
+                    <div class="stat-label">All</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="activeTasks">0</div>
+                    <div class="stat-label">Active</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="completedTasks">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <svg class="icon search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.3-4.3" />
+                </svg>
+                <input type="text" id="searchInput" placeholder="Search for a task..." autocomplete="off">
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="todoInput" placeholder="What do you need to study?" autocomplete="off">
+                <button class="btn btn-add" id="addBtn"><span>+</span> Add</button>
+            </div>
+            <div class="tk-row">
+                <select id="todoSubj"><option value="">No subject</option></select>
+                <label>Due date <input type="date" id="todoDue"></label>
+            </div>
+
+            <div class="priority-container">
+                <span class="label-muted">Priority:</span>
+                <button class="priority-btn active" data-priority="low">Low</button>
+                <button class="priority-btn" data-priority="medium">Medium</button>
+                <button class="priority-btn" data-priority="high">High</button>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+
+            <div class="sort-container">
+                <span class="label-muted">Sort by:</span>
+                <button class="sort-btn" data-sort="date">Date</button>
+                <button class="sort-btn" data-sort="priority">Priority</button>
+            </div>
+
+            <div class="od-box" id="odBox" style="display:none"></div>
+            <ul class="todo-list" id="todoList"></ul>
+            <button class="btn btn-clear" id="clearBtn" style="display:none;">Clear Completed</button>
+        </div>
+
+        <div class="tab-panel" id="timerTab">
+            <div class="timer-box" id="timerBox">
+                <div class="mode-switch">
+                    <button class="mode-btn active" data-mode="countdown">Countdown</button>
+                    <button class="mode-btn" data-mode="stopwatch">Stopwatch</button>
+                </div>
+
+                <div class="phase" id="phaseLabel"></div>
+                <div class="flip-clock" id="flipClock">
+                    <div class="flip-card"><span class="flip-digit" id="fcH">00</span></div>
+                    <div class="flip-card"><span class="flip-digit" id="fcM">00</span></div>
+                    <div class="flip-card"><span class="flip-digit" id="fcS">00</span></div>
+                </div>
+
+                <div class="time-inputs" id="timeInputs">
+                    <label>Hours<input type="number" id="inH" min="0" max="99" value="0"></label>
+                    <label>Minutes<input type="number" id="inM" min="0" max="59" value="25"></label>
+                    <label>Seconds<input type="number" id="inS" min="0" max="59" value="0"></label>
+                </div>
+
+                <div class="timer-controls">
+                    <button class="btn btn-start" id="timerStart">Start</button>
+                    <button class="btn btn-reset" id="timerReset">Reset</button>
+                    <button class="btn btn-reset" id="focusBtn"><svg class="icon" id="focusIcon" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path
+                                d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3" />
+                        </svg><span id="focusLabel">Zoom</span></button>
+                </div>
+
+                <div class="skip-row" id="skipRow">
+                    <span class="label-muted">Skip ahead</span>
+                    <button class="btn btn-reset btn-chip" data-skip="1">+1 min</button>
+                    <button class="btn btn-reset btn-chip" data-skip="5">+5 min</button>
+                    <button class="btn btn-reset btn-chip" data-skip="10">+10 min</button>
+                    <button class="btn btn-reset btn-chip" id="skipBreak" style="display:none">Skip break</button>
+                </div>
+
+                <div class="timer-opts" id="timerOpts">
+                    <div class="opt-row">
+                        <label class="chk"><input type="checkbox" id="optBreak"><span>Take breaks</span></label>
+                        <span class="opt-inline"><span>Every</span><input type="number" id="optEvery" min="1" max="240"
+                                value="25" disabled><span>min</span></span>
+                        <span class="opt-inline"><span>Break length</span><input type="number" id="optLen" min="1"
+                                max="60" value="5" disabled><span>min</span></span>
+                    </div>
+                    <div class="opt-row">
+                        <label class="chk"><input type="checkbox" id="optTick"><span>Tick sound</span></label>
+                    </div>
+                    <div class="opt-row">
+                        <span class="opt-lbl">Ambient sound</span>
+                        <select id="optAmb" aria-label="Ambient sound">
+                            <option value="off">Off</option>
+                            <option value="rain">Rain</option>
+                            <option value="waves">Waves</option>
+                            <option value="wind">Wind</option>
+                            <option value="forest">Forest</option>
+                            <option value="stream">Stream</option>
+                        </select>
+                        <button class="btn btn-small btn-ghost" id="optPrev">Preview</button>
+                        <input type="range" id="optVol" min="0" max="1" step="0.05" aria-label="Volume">
+                    </div>
+                </div>
+
+                <div class="session" id="sessionBox">
+                    <div class="session-head">
+                        <h2 id="sessionTitle">This session's tasks</h2>
+                        <span class="session-count" id="sessionCount">0 / 0 done</span>
+                    </div>
+                    <div class="session-src">
+                        <button class="src-btn active" data-src="tasks">My study tasks</button>
+                        <button class="src-btn" data-src="day">Schedule day</button>
+                        <select id="srcDay" aria-label="Day" style="display:none"></select>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" id="sessionBar"></div>
+                    </div>
+
+                    <div class="session-add">
+                        <input type="text" id="sessionInput" placeholder="Add a new task to this session..."
+                            autocomplete="off">
+                        <button class="btn btn-small" id="sessionAddBtn">Add</button>
+                    </div>
+                    <div class="session-add" id="sessionPickRow">
+                        <select id="sessionPick"></select>
+                        <button class="btn btn-small" id="sessionPickBtn">Add from my tasks</button>
+                    </div>
+
+                    <ul class="session-list" id="sessionList"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="tab-panel" id="scheduleTab">
+            <div class="quote-card">
+                <div class="quote-label">Daily inspiration</div>
+                <div id="quoteBody"></div>
+                <button class="btn btn-reset" id="quoteNext">Another one</button>
+            </div>
+
+            <div class="notif-box">
+                <div class="notif-top">
+                    <span class="label-muted" id="notifStatus"></span>
+                    <button class="btn btn-small" id="notifEnable">Enable notifications</button>
+                    <button class="btn btn-small btn-ghost" id="notifTest">Send test</button>
+                </div>
+                <label class="chk"><input type="checkbox" id="nDaily"><span>Daily reminder at</span><input type="time"
+                        id="nTime"></label>
+                <label class="chk"><input type="checkbox" id="nTask"><span>Remind me at each task's time</span></label>
+            </div>
+
+            <div class="sch-add">
+                <select id="schDay" aria-label="Day"></select>
+                <label class="chk"><input type="checkbox" id="schNoTime" checked><span>No specific time</span></label>
+                <input type="time" id="schTime" aria-label="Time" disabled>
+                <input type="text" id="schText" placeholder="Task for this day..." autocomplete="off">
+                <button class="btn btn-small" id="schAdd">Add to schedule</button>
+            </div>
+
+            <div class="sch-wrap">
+                <table class="sch-table" id="schTable"></table>
+            </div>
+        </div>
+
+        <div class="tab-panel" id="translateTab">
+            <div class="tr-langs">
+                <select id="trFrom" aria-label="From language"></select>
+                <button class="swap-btn" id="trSwap" title="Swap languages" aria-label="Swap languages"><svg
+                        class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8 3 4 7l4 4M4 7h16M16 21l4-4-4-4M20 17H4" />
+                    </svg></button>
+                <select id="trTo" aria-label="To language"></select>
+            </div>
+            <textarea id="trInput" dir="auto" placeholder="Type a word or sentence to translate..."></textarea>
+            <div class="tr-actions">
+                <button class="btn btn-add" id="trGo">Translate</button>
+                <button class="btn btn-reset" id="trClear">Clear</button>
+                <button class="btn btn-reset" id="trVoice"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21 4H14M10 4H3M21 12H12M8 12H3M21 20H16M12 20H3M14 2v4M8 10v4M16 18v4" />
+                    </svg>Voice</button>
+            </div>
+            <div class="voice-panel" id="voicePanel">
+                <div id="voiceList"></div>
+                <div class="voice-row"><label for="vRate">Speed</label><input type="range" id="vRate" min="0.5"
+                        max="1.5" step="0.1"><output id="vRateV"></output></div>
+                <div class="voice-row"><label for="vPitch">Pitch</label><input type="range" id="vPitch" min="0" max="2"
+                        step="0.1"><output id="vPitchV"></output></div>
+                <div class="voice-row"><label for="vVol">Volume</label><input type="range" id="vVol" min="0" max="1"
+                        step="0.1"><output id="vVolV"></output></div>
+                <div class="voice-foot"><button class="btn btn-reset" id="vReset">Reset voice</button></div>
+            </div>
+            <div class="tr-status" id="trStatus"></div>
+            <div class="tr-result" id="trResult"></div>
+        </div>
+
+        <div class="tab-panel" id="statsTab">
+            <div class="st-grid">
+                <div class="st-card"><div class="st-val" id="stTotal">0</div><div class="st-lbl">Total study time</div></div>
+                <div class="st-card"><div class="st-val" id="stToday">0</div><div class="st-lbl">Today</div></div>
+                <div class="st-card"><div class="st-val" id="stWeek">0</div><div class="st-lbl">Last 7 days</div></div>
+                <div class="st-card"><div class="st-val" id="stDone">0</div><div class="st-lbl">Tasks done</div></div>
+                <div class="st-card"><div class="st-val" id="stLeft">0</div><div class="st-lbl">Not done</div></div>
+                <div class="st-card"><div class="st-val" id="stRate">0%</div><div class="st-lbl">Completion rate</div><div class="st-bar"><i id="stBar" style="width:0%"></i></div></div>
+            </div>
+            <div class="st-chart-box">
+                <div class="st-head">
+                    <h3>Progress curve</h3>
+                    <div class="st-seg" id="stMetric"><button class="st-b active" data-m="hours">Study hours</button><button class="st-b" data-m="tasks">Completed tasks</button></div>
+                </div>
+                <div class="st-seg" id="stRange" style="margin-bottom:10px"><button class="st-b active" data-r="7">7 days</button><button class="st-b" data-r="30">30 days</button></div>
+                <svg class="st-svg" id="stChart" viewBox="0 0 600 260" role="img" aria-label="Progress curve"></svg>
+                <div class="st-note" id="stSched"></div>
+                <div class="st-note">Study time is counted while the timer is running.</div>
+            </div>
+            <div class="st-chart-box" style="margin-top:16px">
+                <h3>Weekly report</h3>
+                <div class="st-grid" id="wkGrid" style="margin:12px 0 0"></div>
+            </div>
+            <div class="st-chart-box" style="margin-top:16px">
+                <h3 style="margin-bottom:12px">Activity map</h3>
+                <svg class="st-svg" id="hmChart" viewBox="0 0 306 160" role="img" aria-label="Activity map"></svg>
+            </div>
+        </div>
+
+        <div class="tab-panel" id="subjTab">
+            <div class="input-container">
+                <input type="text" id="sjName" placeholder="Subject name..." autocomplete="off" maxlength="60">
+                <input type="color" id="sjColor" value="#8b5cf6" aria-label="Color">
+                <button class="btn btn-add" id="sjAdd"><span>+</span> Add</button>
+            </div>
+            <div id="sjList"></div>
+            <div class="st-chart-box" style="margin-top:16px">
+                <h3>Smart planner</h3>
+                <div class="st-note" style="text-align:start">Builds a weekly plan from your unfinished tasks, due dates and priority.</div>
+                <div class="pl-row">
+                    <label>Hours per day<input type="number" id="plHrs" value="2" min="0.5" max="16" step="0.5"></label>
+                    <label>Minutes per task<input type="number" id="plMin" value="45" min="10" max="240" step="5"></label>
+                    <label>Start time<input type="time" id="plStart" value="16:00"></label>
+                </div>
+                <div class="st-seg"><button class="st-b active" id="plBuild">Build plan</button><button class="st-b" id="plAI">Build with AI</button><button class="st-b" id="plApply">Apply to schedule</button></div>
+                <div id="plOut"></div>
+            </div>
+        </div>
+        <div class="app-footer">&copy; 2026 Focusly. All rights reserved.</div>
+    </div>
+
+    <script>
+        (function () {
+            var root = document.documentElement, btn = document.getElementById('themeToggle');
+            var saved = null;
+            try { saved = localStorage.getItem('theme'); } catch (e) { }
+            var theme = saved || (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+            function apply(t) {
+                root.setAttribute('data-theme', t);
+                btn.innerHTML = t === 'dark' ? '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>' : '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>';
+                try { localStorage.setItem('theme', t); } catch (e) { }
+            }
+            btn.addEventListener('click', function () {
+                apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+            });
+            apply(theme);
+        })();
+
+        function esc(s) {
+            return String(s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+        function stamp() {
+            return new Date().toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
+        }
+
+        var todos = [];
+        var studyLog = {}, doneLog = {}, subjects = [];
+        var sessionIds = [];
+        function pad2(n) { return (n < 10 ? '0' : '') + n; }
+        function dayKey(d) { d = d || new Date(); return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+        function metaX(t) {
+            var h = '<div class="todo-meta">' + esc(t.createdAt), ar = (typeof LANG !== 'undefined' && LANG === 'ar');
+            var sj = null; subjects.forEach(function (x) { if (x.id === t.subj) sj = x; });
+            if (sj) h += '<span class="chip" style="border-color:' + esc(sj.color) + '">' + esc(sj.name) + '</span>';
+            if (t.due) {
+                var late = !t.completed && t.due < dayKey();
+                h += '<span class="chip' + (late ? ' late' : '') + '">' + (ar ? 'الاستحقاق: ' : 'Due: ') + esc(t.due) + (late ? (ar ? ' (متأخرة)' : ' (overdue)') : '') + '</span>';
+            }
+            return h + '</div>';
+        }
+        function markDone(t) {
+            if (t.completed) { var k = dayKey(); t.doneDay = k; doneLog[k] = (doneLog[k] || 0) + 1; }
+            else if (t.doneDay) { doneLog[t.doneDay] = Math.max(0, (doneLog[t.doneDay] || 0) - 1); delete t.doneDay; }
+        }
+        var studyDirty = 0, studyFlushed = 0;
+        function flushStudy() { if (!studyDirty) return; studyDirty = 0; studyFlushed = Date.now(); save(); }
+        function logStudy(ms) {
+            if (!(ms > 0)) return;
+            var k = dayKey(); studyLog[k] = (studyLog[k] || 0) + ms; studyDirty += ms;
+            if (Date.now() - studyFlushed > 15000) flushStudy();
+        }
+        window.addEventListener('pagehide', flushStudy);
+        document.addEventListener('visibilitychange', function () { if (document.hidden) flushStudy(); });
+        var sessionSrc = { mode: 'tasks', day: new Date().getDay() };
+        var currentFilter = 'all';
+        var currentPriority = 'low';
+        var editingId = null;
+
+        function load() {
+            try {
+                var t = localStorage.getItem('todos'); if (t) todos = JSON.parse(t);
+                var s = localStorage.getItem('sessionIds'); if (s) sessionIds = JSON.parse(s);
+                var ss = localStorage.getItem('sessionSrc'); if (ss) sessionSrc = JSON.parse(ss);
+                var sl = localStorage.getItem('studyLog'); if (sl) studyLog = JSON.parse(sl) || {};
+                var dl = localStorage.getItem('doneLog'); if (dl) doneLog = JSON.parse(dl) || {};
+                var sb = localStorage.getItem('subjects'); if (sb) subjects = JSON.parse(sb) || [];
+            } catch (e) { }
+        }
+        function save() {
+            try {
+                localStorage.setItem('todos', JSON.stringify(todos));
+                localStorage.setItem('sessionIds', JSON.stringify(sessionIds));
+                localStorage.setItem('sessionSrc', JSON.stringify(sessionSrc));
+                localStorage.setItem('studyLog', JSON.stringify(studyLog));
+                localStorage.setItem('doneLog', JSON.stringify(doneLog));
+                localStorage.setItem('subjects', JSON.stringify(subjects));
+            } catch (e) { }
+        }
+        function refresh() { save(); renderTodos(); updateStats(); renderSession(); }
+
+        document.querySelectorAll('.tab-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+                document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
+                btn.classList.add('active');
+                document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+
+        function newTodo(text, completed) {
+            var t = { id: Date.now() + Math.floor(Math.random() * 1000), text: text, completed: !!completed, priority: currentPriority, createdAt: stamp() };
+            todos.unshift(t);
+            if (t.completed) markDone(t);
+            return t;
+        }
+
+        function addTodo() {
+            var input = document.getElementById('todoInput');
+            var text = input.value.trim();
+            if (!text) return;
+            if (editingId) {
+                todos.forEach(function (t) { if (t.id === editingId) { t.text = text; t.priority = currentPriority; t.subj = document.getElementById('todoSubj').value; t.due = document.getElementById('todoDue').value; } });
+                editingId = null;
+                document.querySelector('.btn-add span').style.display = '';
+                document.querySelector('.btn-add').lastChild.textContent = ' Add';
+            } else {
+                var nt = newTodo(text, false); nt.subj = document.getElementById('todoSubj').value; nt.due = document.getElementById('todoDue').value;
+            }
+            document.getElementById('todoDue').value = '';
+            input.value = '';
+            refresh();
+        }
+
+        function editTodo(id) {
+            var todo = todos.find(function (t) { return t.id === id; });
+            if (!todo) return;
+            document.getElementById('todoInput').value = todo.text;
+            editingId = id;
+            document.querySelectorAll('.priority-btn').forEach(function (b) {
+                b.classList.toggle('active', b.getAttribute('data-priority') === todo.priority);
+            });
+            currentPriority = todo.priority;
+            document.getElementById('todoSubj').value = todo.subj || '';
+            document.getElementById('todoDue').value = todo.due || '';
+            document.querySelector('.btn-add span').style.display = 'none';
+            document.querySelector('.btn-add').lastChild.textContent = ' Save';
+            document.getElementById('todoInput').focus();
+        }
+
+        function toggleTodo(id) {
+            todos.forEach(function (t) { if (t.id === id) { t.completed = !t.completed; markDone(t); } });
+            refresh();
+        }
+
+        function deleteTodo(id) {
+            if (!confirm(T('Are you sure you want to delete this task?'))) return;
+            todos = todos.filter(function (t) { return t.id !== id; });
+            sessionIds = sessionIds.filter(function (i) { return i !== id; });
+            refresh();
+        }
+
+        function clearCompleted() {
+            if (!confirm(T('Do you want to delete all completed tasks?'))) return;
+            var gone = todos.filter(function (t) { return t.completed; }).map(function (t) { return t.id; });
+            todos = todos.filter(function (t) { return !t.completed; });
+            sessionIds = sessionIds.filter(function (i) { return gone.indexOf(i) === -1; });
+            refresh();
+        }
+
+        function sortTodos(type) {
+            if (type === 'priority') {
+                var order = { high: 0, medium: 1, low: 2 };
+                todos.sort(function (a, b) { return order[a.priority] - order[b.priority]; });
+            } else {
+                todos.sort(function (a, b) { return b.id - a.id; });
+            }
+            renderTodos();
+        }
+
+        function renderTodos() {
+            var list = document.getElementById('todoList');
+            var term = document.getElementById('searchInput').value.toLowerCase();
+            var filtered = todos.filter(function (t) {
+                if (currentFilter === 'active' && t.completed) return false;
+                if (currentFilter === 'completed' && !t.completed) return false;
+                return !term || t.text.toLowerCase().indexOf(term) !== -1;
+            });
+            if (!filtered.length) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/></svg></div><div class="empty-state-text">No tasks found</div><div>Add what you need to study to get started.</div></div>';
+            } else {
+                list.innerHTML = filtered.map(function (t) {
+                    return '<li class="todo-item priority-' + t.priority + (t.completed ? ' completed' : '') + '">' +
+                        '<div class="checkbox' + (t.completed ? ' checked' : '') + '" onclick="toggleTodo(' + t.id + ')"></div>' +
+                        '<div class="todo-content"><span class="todo-text">' + esc(t.text) + '</span>' + metaX(t) + '</div>' +
+                        '<div class="todo-actions"><button class="btn-edit" onclick="editTodo(' + t.id + ')">Edit</button>' +
+                        '<button class="btn-delete" onclick="deleteTodo(' + t.id + ')">Delete</button></div></li>';
+                }).join('');
+            }
+            document.getElementById('clearBtn').style.display = todos.some(function (t) { return t.completed; }) ? 'block' : 'none';
+        }
+
+        function updateStats() {
+            var total = todos.length;
+            var done = todos.filter(function (t) { return t.completed; }).length;
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('activeTasks').textContent = total - done;
+            document.getElementById('completedTasks').textContent = done;
+        }
+
+        document.getElementById('addBtn').addEventListener('click', addTodo);
+        document.getElementById('clearBtn').addEventListener('click', clearCompleted);
+        document.getElementById('todoInput').addEventListener('keypress', function (e) { if (e.key === 'Enter') addTodo(); });
+        document.getElementById('searchInput').addEventListener('input', renderTodos);
+        document.querySelectorAll('.sort-btn').forEach(function (b) {
+            b.addEventListener('click', function () { sortTodos(b.getAttribute('data-sort')); });
+        });
+        document.querySelectorAll('.filter-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-filter');
+                renderTodos();
+            });
+        });
+        document.querySelectorAll('.priority-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.priority-btn').forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                currentPriority = btn.getAttribute('data-priority');
+            });
+        });
+
+        function sessionData() {
+            if (sessionSrc.mode === 'day' && typeof sched !== 'undefined') {
+                return sched[sessionSrc.day].slice().sort(function (x, y) {
+                    if (!x.time && !y.time) return 0;
+                    if (!x.time) return 1; if (!y.time) return -1;
+                    return x.time < y.time ? -1 : x.time > y.time ? 1 : 0;
+                }).map(function (t) { return { id: t.id, text: t.text, completed: t.done, time: t.time, sch: sessionSrc.day }; });
+            }
+            sessionIds = sessionIds.filter(function (id) { return todos.some(function (t) { return t.id === id; }); });
+            return sessionIds.map(function (id) { return todos.find(function (t) { return t.id === id; }); });
+        }
+
+        function renderSession() {
+            var day = sessionSrc.mode === 'day' && typeof sched !== 'undefined';
+            var items = sessionData();
+            var done = items.filter(function (t) { return t.completed; }).length;
+
+            document.querySelectorAll('.src-btn').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-src') === (day ? 'day' : 'tasks')); });
+            var sel = document.getElementById('srcDay');
+            sel.style.display = day ? '' : 'none';
+            if (day) sel.value = sessionSrc.day;
+            document.getElementById('sessionPickRow').style.display = day ? 'none' : '';
+            document.getElementById('sessionTitle').textContent = day
+                ? ((typeof LANG !== 'undefined' && LANG === 'ar') ? 'مهام يوم ' + AR[DAYS[sessionSrc.day]] : DAYS[sessionSrc.day] + ' tasks')
+                : (typeof T === 'function' ? T("This session's tasks") : "This session's tasks");
+            document.getElementById('sessionInput').placeholder = day
+                ? (typeof T === 'function' ? T('Add a task to this day...') : 'Add a task to this day...')
+                : (typeof T === 'function' ? T('Add a new task to this session...') : 'Add a new task to this session...');
+
+            document.getElementById('sessionBox').classList.toggle('is-empty', !items.length);
+            document.getElementById('sessionCount').textContent = done + ' / ' + items.length + ' done';
+            document.getElementById('sessionBar').style.width = (items.length ? Math.round(done / items.length * 100) : 0) + '%';
+
+            var list = document.getElementById('sessionList');
+            if (!items.length) {
+                list.innerHTML = '<li class="session-done">' + (day ? 'Nothing scheduled for this day.' : 'No tasks yet. Add one above or pick from your study tasks.') + '</li>';
+            } else {
+                list.innerHTML = items.map(function (t) {
+                    var isSch = t.sch !== undefined;
+                    return '<li class="session-item' + (t.completed ? ' completed' : '') + '">' +
+                        '<div class="checkbox' + (t.completed ? ' checked' : '') + '" onclick="' + (isSch ? 'schToggle(' + t.sch + ',' + t.id + ')' : 'toggleTodo(' + t.id + ')') + '"></div>' +
+                        (t.time ? '<span class="sch-time">' + esc(t.time) + '</span>' : '') +
+                        '<span class="todo-text">' + esc(t.text) + '</span>' +
+                        (isSch ? '' : '<button class="remove-btn" title="Remove from session" onclick="removeFromSession(' + t.id + ')">×</button>') + '</li>';
+                }).join('');
+            }
+
+            if (!day) {
+                var pick = document.getElementById('sessionPick');
+                var avail = todos.filter(function (t) { return !t.completed && sessionIds.indexOf(t.id) === -1; });
+                pick.innerHTML = avail.length
+                    ? avail.map(function (t) { return '<option value="' + t.id + '">' + esc(t.text) + '</option>'; }).join('')
+                    : '<option value="">No other active tasks</option>';
+            }
+        }
+
+        function removeFromSession(id) {
+            sessionIds = sessionIds.filter(function (i) { return i !== id; });
+            save(); renderSession();
+        }
+
+        function addSessionNew() {
+            var input = document.getElementById('sessionInput');
+            var text = input.value.trim();
+            if (!text) return;
+            if (sessionSrc.mode === 'day' && typeof sched !== 'undefined') {
+                sched[sessionSrc.day].push({ id: Date.now() + Math.floor(Math.random() * 1000), text: text, time: '', done: false });
+                saveSched(); renderSchedule(); input.value = ''; renderSession();
+                return;
+            }
+            var t = newTodo(text, false);
+            sessionIds.push(t.id);
+            input.value = '';
+            refresh();
+        }
+
+        function addSessionPick() {
+            var v = parseInt(document.getElementById('sessionPick').value);
+            if (!v || sessionIds.indexOf(v) !== -1) return;
+            sessionIds.push(v);
+            save(); renderSession();
+        }
+
+        document.querySelectorAll('.src-btn').forEach(function (b) {
+            b.addEventListener('click', function () { sessionSrc.mode = b.getAttribute('data-src'); save(); renderSession(); });
+        });
+        document.getElementById('srcDay').addEventListener('change', function (e) { sessionSrc.day = parseInt(e.target.value); save(); renderSession(); });
+        document.getElementById('sessionAddBtn').addEventListener('click', addSessionNew);
+        document.getElementById('sessionPickBtn').addEventListener('click', addSessionPick);
+        document.getElementById('sessionInput').addEventListener('keypress', function (e) { if (e.key === 'Enter') addSessionNew(); });
+
+        (function () {
+            var mode = 'countdown', running = false, phase = 'work', skipping = false;
+            var elapsedMs = 0, remainingMs = 0, breakRemaining = 0, workSince = 0, lastTs = 0, tick = null, lastTotal = -1;
+            var opts = { brk: false, every: 25, len: 5, tick: false, amb: 'off', vol: 0.5 };
+            try { var so = JSON.parse(localStorage.getItem('timerOpts')); if (so) for (var k in so) if (k in opts) opts[k] = so[k]; } catch (e) { }
+
+            var $ = function (id) { return document.getElementById(id); };
+            var cards = { h: $('fcH'), m: $('fcM'), s: $('fcS') };
+            var clock = $('flipClock'), startBtn = $('timerStart'), resetBtn = $('timerReset'), inputs = $('timeInputs'), phaseEl = $('phaseLabel');
+            var inH = $('inH'), inM = $('inM'), inS = $('inS');
+            var timerBox = $('timerBox'), focusBtn = $('focusBtn');
+            var oBrk = $('optBreak'), oEvery = $('optEvery'), oLen = $('optLen'), oTick = $('optTick'), oAmb = $('optAmb'), oVol = $('optVol'), oPrev = $('optPrev');
+            function L(en, ar) { return (typeof LANG !== 'undefined' && LANG === 'ar') ? ar : en; }
+            function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+            var ctx = null, bufs = {}, amb = null, birdTimer = null, previewing = false;
+            function ac() {
+                if (!ctx) { var C = window.AudioContext || window.webkitAudioContext; if (!C) return null; ctx = new C(); }
+                if (ctx.state === 'suspended') ctx.resume();
+                return ctx;
+            }
+            function tone(f, t0, dur, g, type) {
+                var c = ac(); if (!c) return;
+                var o = c.createOscillator(), n = c.createGain(), t = c.currentTime + t0;
+                o.type = type || 'sine'; o.frequency.value = f; o.connect(n); n.connect(c.destination);
+                n.gain.setValueAtTime(0.0001, t); n.gain.exponentialRampToValueAtTime(g, t + 0.005); n.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+                o.start(t); o.stop(t + dur + 0.03);
+            }
+            function tickSound(kind) {
+                if (kind === 'h') { tone(1568, 0, 0.18, 0.18); tone(2093, 0.16, 0.28, 0.18); }
+                else if (kind === 'm') tone(1175, 0, 0.2, 0.15);
+                else tone(1000, 0, 0.04, 0.06, 'triangle');
+            }
+            function chime(kind) {
+                if (kind === 'breakStart') { tone(784, 0, 0.3, 0.2); tone(659, 0.25, 0.4, 0.2); }
+                else if (kind === 'breakEnd') { tone(523, 0, 0.25, 0.2); tone(659, 0.2, 0.25, 0.2); tone(784, 0.4, 0.4, 0.2); }
+                else { tone(880, 0, 0.3, 0.3); tone(880, 0.35, 0.3, 0.3); tone(880, 0.7, 0.3, 0.3); }
+            }
+            function noiseBuf(kind) {
+                var c = ac(), len = c.sampleRate * 4, b = c.createBuffer(1, len, c.sampleRate), d = b.getChannelData(0);
+                var last = 0, b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+                for (var i = 0; i < len; i++) {
+                    var w = Math.random() * 2 - 1;
+                    if (kind === 'white') d[i] = w * 0.5;
+                    else if (kind === 'brown') { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; }
+                    else {
+                        b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759; b2 = 0.969 * b2 + w * 0.153852;
+                        b3 = 0.8665 * b3 + w * 0.3104856; b4 = 0.55 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.016898;
+                        d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11; b6 = w * 0.115926;
+                    }
+                }
+                return b;
+            }
+            function startAmbient(type) {
+                stopAmbient(); var c = ac(); if (!c || type === 'off') return;
+                var master = c.createGain(); master.gain.value = 0; master.connect(c.destination);
+                master.gain.linearRampToValueAtTime(opts.vol, c.currentTime + 1.2);
+                var nodes = [];
+                function layer(kind, filters, base) {
+                    var s = c.createBufferSource(); s.buffer = bufs[kind] || (bufs[kind] = noiseBuf(kind)); s.loop = true;
+                    var prev = s, fl = [];
+                    filters.forEach(function (f) { var n = c.createBiquadFilter(); n.type = f[0]; n.frequency.value = f[1]; if (f[2]) n.Q.value = f[2]; prev.connect(n); prev = n; fl.push(n); });
+                    var g = c.createGain(); g.gain.value = base; prev.connect(g); g.connect(master);
+                    s.start(); nodes.push(s); g.filters = fl; return g;
+                }
+                function lfo(freq, depth, param) {
+                    var o = c.createOscillator(), g = c.createGain(); o.frequency.value = freq; g.gain.value = depth;
+                    o.connect(g); g.connect(param); o.start(); nodes.push(o);
+                }
+                if (type === 'rain') {
+                    layer('pink', [['highpass', 700], ['lowpass', 9000]], 0.9);
+                    layer('brown', [['lowpass', 300]], 0.4);
+                } else if (type === 'waves') {
+                    var w1 = layer('brown', [['lowpass', 800]], 0.5); lfo(0.09, 0.4, w1.gain);
+                    var w2 = layer('pink', [['highpass', 1200], ['lowpass', 6000]], 0.12); lfo(0.09, 0.1, w2.gain);
+                    var w3 = layer('brown', [['lowpass', 500]], 0.3); lfo(0.13, 0.25, w3.gain);
+                } else if (type === 'wind') {
+                    var d1 = layer('pink', [['bandpass', 500, 0.7]], 0.8); lfo(0.07, 0.3, d1.gain); lfo(0.05, 250, d1.filters[0].frequency);
+                } else if (type === 'forest') {
+                    var f1 = layer('pink', [['bandpass', 450, 0.7]], 0.35); lfo(0.06, 0.12, f1.gain);
+                    var bird = function () {
+                        if (!amb) return;
+                        var n = 2 + Math.floor(Math.random() * 3), f0 = 2200 + Math.random() * 1800;
+                        for (var i = 0; i < n; i++) {
+                            var o = c.createOscillator(), g = c.createGain(), t = c.currentTime + i * 0.16;
+                            o.type = 'sine'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f0 * 1.3, t + 0.09);
+                            g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.1, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+                            o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.15);
+                        }
+                        birdTimer = setTimeout(bird, 1800 + Math.random() * 4500);
+                    };
+                    birdTimer = setTimeout(bird, 1200);
+                } else if (type === 'stream') {
+                    var st = layer('white', [['highpass', 800], ['bandpass', 2200, 0.6]], 0.5); lfo(0.4, 0.08, st.gain);
+                    layer('brown', [['lowpass', 500]], 0.35);
+                }
+                amb = { type: type, master: master, nodes: nodes };
+            }
+            function stopAmbient() {
+                clearTimeout(birdTimer);
+                if (!amb) return;
+                var a = amb; amb = null;
+                try { a.master.gain.cancelScheduledValues(ctx.currentTime); a.master.gain.setTargetAtTime(0, ctx.currentTime, 0.15); } catch (e) { }
+                setTimeout(function () {
+                    a.nodes.forEach(function (n) { try { n.stop(); } catch (e) { } });
+                    try { a.master.disconnect(); } catch (e) { }
+                }, 800);
+            }
+            function updateAmbient() {
+                var want = opts.amb !== 'off' && (running || previewing);
+                if (want) { if (!amb || amb.type !== opts.amb) startAmbient(opts.amb); }
+                else stopAmbient();
+                oPrev.textContent = previewing ? 'Stop' : 'Preview';
+            }
+
+            function setCard(el, val) {
+                if (el.textContent === val) return;
+                el.textContent = val;
+                el.classList.remove('flip'); void el.offsetWidth; el.classList.add('flip');
+            }
+            function setDigits(total) {
+                total = Math.max(0, total);
+                setCard(cards.h, pad(Math.floor(total / 3600)));
+                setCard(cards.m, pad(Math.floor((total % 3600) / 60)));
+                setCard(cards.s, pad(total % 60));
+            }
+            function show(ms) { setDigits(Math.ceil(ms / 1000)); }
+            function updateSkip() {
+                var can = phase === 'break' || mode === 'stopwatch' || remainingMs > 0;
+                document.querySelectorAll('[data-skip]').forEach(function (b) { b.disabled = !can; });
+                $('skipBreak').style.display = phase === 'break' ? '' : 'none';
+            }
+            function updatePhase() {
+                updateSkip();
+                var on = opts.brk && (running || phase === 'break');
+                phaseEl.textContent = on ? (phase === 'break' ? 'Break' : 'Focus') : '';
+                phaseEl.classList.toggle('break', phase === 'break');
+            }
+            function render() {
+                var total = phase === 'break' ? Math.ceil(breakRemaining / 1000)
+                    : mode === 'countdown' ? Math.ceil(remainingMs / 1000) : Math.floor(elapsedMs / 1000);
+                setDigits(total);
+                if (running && opts.tick && lastTotal >= 0 && total !== lastTotal) {
+                    tickSound(Math.floor(total / 3600) !== Math.floor(lastTotal / 3600) ? 'h' : Math.floor(total / 60) !== Math.floor(lastTotal / 60) ? 'm' : 's');
+                }
+                lastTotal = total;
+                updatePhase();
+            }
+            function readInputs() {
+                var h = Math.min(99, Math.max(0, parseInt(inH.value) || 0));
+                var m = Math.min(59, Math.max(0, parseInt(inM.value) || 0));
+                var s = Math.min(59, Math.max(0, parseInt(inS.value) || 0));
+                return (h * 3600 + m * 60 + s) * 1000;
+            }
+            function say(en, ar, bEn, bAr) { if (typeof notify === 'function') notify(L(en, ar), L(bEn, bAr)); }
+
+            var ICON_MAX = '<path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>';
+            var ICON_MIN = '<path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/>';
+            function setFocus(on) {
+                timerBox.classList.toggle('focus', on);
+                document.body.classList.toggle('focus-mode', on);
+                $('focusIcon').innerHTML = on ? ICON_MIN : ICON_MAX;
+                $('focusLabel').textContent = on ? 'Exit' : 'Zoom';
+            }
+            focusBtn.addEventListener('click', function () { setFocus(!timerBox.classList.contains('focus')); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setFocus(false); });
+
+            function stop() { flushStudy(); running = false; clearInterval(tick); tick = null; startBtn.textContent = 'Start'; updateAmbient(); updatePhase(); }
+            function finish() {
+                remainingMs = 0; phase = 'work'; workSince = 0;
+                stop(); show(0); lastTotal = -1;
+                clock.classList.add('done'); chime('end');
+                say('Time is up', 'انتهى الوقت', 'Great work. Time for a rest.', 'أحسنت، حان وقت الراحة.');
+            }
+            function advance(dt) {
+                var guard = 0;
+                while (dt > 0 && guard++ < 50) {
+                    if (phase === 'break') {
+                        var ub = Math.min(dt, breakRemaining); breakRemaining -= ub; dt -= ub;
+                        if (breakRemaining <= 0) {
+                            phase = 'work'; lastTotal = -1; chime('breakEnd');
+                            say('Back to study', 'العودة للمذاكرة', 'Break is over. Keep going.', 'انتهت الاستراحة. واصل بنشاط.');
+                        } else break;
+                    } else {
+                        var limit = Infinity, every = opts.every * 60000;
+                        if (mode === 'countdown') limit = Math.min(limit, remainingMs);
+                        if (opts.brk) limit = Math.min(limit, Math.max(0, every - workSince));
+                        var u = Math.min(dt, limit);
+                        if (mode === 'countdown') remainingMs -= u; else elapsedMs += u;
+                        workSince += u; dt -= u; if (!skipping) logStudy(u);
+                        if (mode === 'countdown' && remainingMs <= 0) { finish(); return; }
+                        if (opts.brk && workSince >= every) {
+                            phase = 'break'; breakRemaining = opts.len * 60000; workSince = 0; lastTotal = -1; chime('breakStart');
+                            say('Break time', 'وقت الاستراحة', 'Rest for ' + opts.len + ' min.', 'استرح لمدة ' + opts.len + ' دقيقة.');
+                        } else if (dt > 0) break;
+                    }
+                }
+            }
+            function loop() {
+                var now = Date.now(), dt = now - lastTs; lastTs = now;
+                advance(dt);
+                if (running) render();
+            }
+            function start() {
+                ac(); clock.classList.remove('done');
+                if (mode === 'countdown' && phase === 'work') {
+                    if (remainingMs <= 0) remainingMs = readInputs();
+                    if (remainingMs <= 0) return;
+                }
+                running = true; previewing = false; lastTs = Date.now(); lastTotal = -1;
+                startBtn.textContent = 'Pause';
+                inputs.classList.add('hidden');
+                setFocus(true);
+                tick = setInterval(loop, 100);
+                updateAmbient(); loop();
+            }
+            function reset() {
+                stop(); setFocus(false); clock.classList.remove('done');
+                elapsedMs = 0; remainingMs = 0; breakRemaining = 0; workSince = 0; phase = 'work'; lastTotal = -1;
+                if (mode === 'countdown') { inputs.classList.remove('hidden'); show(readInputs()); }
+                else { inputs.classList.add('hidden'); show(0); }
+                updatePhase();
+            }
+
+            document.querySelectorAll('[data-skip]').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    if (b.disabled) return;
+                    lastTotal = -1;
+                    skipping = true; advance(parseInt(b.getAttribute('data-skip')) * 60000); skipping = false;
+                    render();
+                });
+            });
+            $('skipBreak').addEventListener('click', function () {
+                if (phase !== 'break') return;
+                breakRemaining = 0; phase = 'work'; workSince = 0; lastTotal = -1; chime('breakEnd');
+                render();
+            });
+            startBtn.addEventListener('click', function () { running ? stop() : start(); });
+            resetBtn.addEventListener('click', reset);
+            [inH, inM, inS].forEach(function (inp) {
+                inp.addEventListener('input', function () {
+                    if (!running && remainingMs === 0 && mode === 'countdown') show(readInputs());
+                });
+            });
+            document.querySelectorAll('.mode-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    document.querySelectorAll('.mode-btn').forEach(function (b) { b.classList.remove('active'); });
+                    btn.classList.add('active');
+                    mode = btn.getAttribute('data-mode');
+                    reset();
+                });
+            });
+
+            function saveOpts() { try { localStorage.setItem('timerOpts', JSON.stringify(opts)); } catch (e) { } }
+            function syncOpts() {
+                oBrk.checked = opts.brk; oEvery.value = opts.every; oLen.value = opts.len;
+                oEvery.disabled = oLen.disabled = !opts.brk;
+                oTick.checked = opts.tick; oAmb.value = opts.amb; oVol.value = opts.vol;
+            }
+            oBrk.addEventListener('change', function () {
+                opts.brk = oBrk.checked; workSince = 0;
+                if (!opts.brk && phase === 'break') { phase = 'work'; lastTotal = -1; }
+                syncOpts(); saveOpts(); updatePhase(); if (running) render();
+            });
+            oEvery.addEventListener('change', function () { opts.every = Math.min(240, Math.max(1, parseInt(oEvery.value) || 25)); syncOpts(); saveOpts(); });
+            oLen.addEventListener('change', function () { opts.len = Math.min(60, Math.max(1, parseInt(oLen.value) || 5)); syncOpts(); saveOpts(); });
+            oTick.addEventListener('change', function () { opts.tick = oTick.checked; if (opts.tick) { ac(); tickSound('s'); } saveOpts(); });
+            oAmb.addEventListener('change', function () { opts.amb = oAmb.value; if (opts.amb === 'off') previewing = false; saveOpts(); updateAmbient(); });
+            oVol.addEventListener('input', function () {
+                opts.vol = parseFloat(oVol.value); saveOpts();
+                if (amb && ctx) amb.master.gain.setTargetAtTime(opts.vol, ctx.currentTime, 0.05);
+            });
+            oPrev.addEventListener('click', function () {
+                if (opts.amb === 'off') return;
+                previewing = !previewing; ac(); updateAmbient();
+            });
+
+            syncOpts();
+            show(readInputs());
+            updateAmbient();
+            updatePhase();
+        })();
+
+        (function () {
+            var LANGS = [['en', 'English', 'en-US'], ['ar', 'Arabic', 'ar-SA'], ['fr', 'French', 'fr-FR'], ['es', 'Spanish', 'es-ES'], ['de', 'German', 'de-DE'], ['tr', 'Turkish', 'tr-TR'], ['it', 'Italian', 'it-IT'], ['ru', 'Russian', 'ru-RU'], ['ja', 'Japanese', 'ja-JP'], ['zh-CN', 'Chinese', 'zh-CN'], ['ko', 'Korean', 'ko-KR']];
+            var SPK = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+            var COPY = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+            var PLUS = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+            var from = document.getElementById('trFrom'), to = document.getElementById('trTo');
+            var input = document.getElementById('trInput'), status = document.getElementById('trStatus'), out = document.getElementById('trResult');
+            var last = null;
+
+            function fill(sel, auto) {
+                sel.innerHTML = (auto ? '<option value="auto">Detect language</option>' : '') +
+                    LANGS.map(function (l) { return '<option value="' + l[0] + '">' + l[1] + '</option>'; }).join('');
+            }
+            fill(from, true); fill(to, false);
+            from.value = 'auto'; to.value = 'ar';
+
+            function langName(c) { var l = LANGS.find(function (x) { return x[0] === c || x[0].split('-')[0] === c.split('-')[0]; }); return l ? l[1] : c; }
+            function ttsCode(c) { var l = LANGS.find(function (x) { return x[0] === c || x[0].split('-')[0] === c.split('-')[0]; }); return l ? l[2] : c; }
+
+            async function gtx(text, f, t) {
+                var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=' + f + '&tl=' + t + '&dt=t&dt=rm&q=' + encodeURIComponent(text);
+                var r = await fetch(url);
+                if (!r.ok) throw new Error('gtx');
+                var d = await r.json();
+                var o = '', tp = '', sp = '';
+                (d[0] || []).forEach(function (seg) {
+                    if (seg[0]) o += seg[0];
+                    if (!seg[0] && seg[2]) tp += seg[2];
+                    if (seg[3]) sp += seg[3];
+                });
+                if (!o) throw new Error('empty');
+                return { text: o, tPron: tp, sPron: sp, src: d[2] || (f === 'auto' ? 'en' : f) };
+            }
+            async function memory(text, f, t) {
+                if (f === 'auto') f = /[\u0600-\u06FF]/.test(text) ? 'ar' : 'en';
+                var r = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + f + '|' + t);
+                var d = await r.json();
+                var o = d && d.responseData && d.responseData.translatedText;
+                if (!o) throw new Error('mm');
+                return { text: o, tPron: '', sPron: '', src: f };
+            }
+            async function translate(text, f, t) {
+                try { return await gtx(text, f, t); } catch (e) { return await memory(text, f, t); }
+            }
+            async function ipa(word) {
+                if (!/^[A-Za-z'-]+$/.test(word)) return '';
+                try {
+                    var r = await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word));
+                    if (!r.ok) return '';
+                    var d = await r.json(), e = d[0], p = e.phonetic;
+                    if (!p && e.phonetics) { var f = e.phonetics.find(function (x) { return x.text; }); p = f && f.text; }
+                    return p || '';
+                } catch (e) { return ''; }
+            }
+
+            function block(cls, label, text, pron) {
+                return '<div class="tr-block ' + cls + '"><div class="tr-main"><div class="tr-lang">' + esc(label) + '</div>' +
+                    '<div class="tr-text" dir="auto">' + esc(text) + '</div>' +
+                    (pron ? '<div class="tr-pron">' + esc(pron) + '</div>' : '') + '</div>';
+            }
+
+            async function run() {
+                var text = input.value.trim();
+                if (!text) return;
+                status.textContent = 'Translating...';
+                out.classList.remove('show');
+                try {
+                    var f = from.value, t = to.value;
+                    var res = await translate(text, f, t);
+                    if (f === 'auto' && res.src.split('-')[0] === t.split('-')[0]) {
+                        t = t === 'en' ? 'ar' : 'en';
+                        to.value = t;
+                        res = await translate(text, f, t);
+                    }
+                    var src = res.src, srcPron = res.sPron, tPron = res.tPron;
+                    var isOne = function (x) { return x.split(/\s+/).length === 1; };
+                    if (!srcPron && src.split('-')[0] === 'en' && isOne(text)) srcPron = await ipa(text);
+                    if (!tPron && t === 'en' && isOne(res.text)) tPron = await ipa(res.text);
+                    if (srcPron && srcPron.toLowerCase() === text.toLowerCase()) srcPron = '';
+                    if (tPron && tPron.toLowerCase() === res.text.toLowerCase()) tPron = '';
+                    last = { text: text, src: src, out: res.text, to: t };
+                    renderVoices();
+                    out.innerHTML =
+                        block('tr-src', langName(src), text, srcPron) +
+                        '<div class="tr-tools"><button class="icon-btn" data-act="spk-src" title="Listen">' + SPK + '</button></div></div>' +
+                        block('', langName(t), res.text, tPron) +
+                        '<div class="tr-tools"><button class="icon-btn" data-act="spk-out" title="Listen">' + SPK + '</button>' +
+                        '<button class="icon-btn" data-act="copy" title="Copy">' + COPY + '</button>' +
+                        '<button class="icon-btn" data-act="task" title="Add to study tasks">' + PLUS + '</button></div></div>';
+                    out.classList.add('show');
+                    status.textContent = '';
+                } catch (e) {
+                    status.textContent = "Couldn't translate. Check your internet connection and try again.";
+                }
+            }
+
+            var DEF = { rate: 0.9, pitch: 1, volume: 1 };
+            var voice = { rate: DEF.rate, pitch: DEF.pitch, volume: DEF.volume };
+            try { var sv = JSON.parse(localStorage.getItem('voice')); if (sv) voice = { rate: +sv.rate || DEF.rate, pitch: sv.pitch === 0 ? 0 : (+sv.pitch || DEF.pitch), volume: sv.volume === 0 ? 0 : (+sv.volume || DEF.volume) }; } catch (e) { }
+            var vEls = { rate: ['vRate', 'vRateV'], pitch: ['vPitch', 'vPitchV'], volume: ['vVol', 'vVolV'] };
+            function syncVoice() {
+                Object.keys(vEls).forEach(function (k) {
+                    document.getElementById(vEls[k][0]).value = voice[k];
+                    document.getElementById(vEls[k][1]).textContent = (+voice[k]).toFixed(1) + (k === 'volume' ? '' : 'x');
+                });
+                try { localStorage.setItem('voice', JSON.stringify(voice)); } catch (e) { }
+            }
+            Object.keys(vEls).forEach(function (k) {
+                var el = document.getElementById(vEls[k][0]);
+                el.addEventListener('input', function () { voice[k] = parseFloat(el.value); syncVoice(); });
+                el.addEventListener('change', function () { if (last) speak(last.out, last.to); });
+            });
+            document.getElementById('vReset').addEventListener('click', function () {
+                voice = { rate: DEF.rate, pitch: DEF.pitch, volume: DEF.volume }; syncVoice();
+            });
+            document.getElementById('trVoice').addEventListener('click', function () {
+                document.getElementById('voicePanel').classList.toggle('show');
+            });
+            syncVoice();
+
+            var prefs = {};
+            try { prefs = JSON.parse(localStorage.getItem('voicePrefs')) || {}; } catch (e) { }
+            function base(c) { return String(c).split('-')[0]; }
+            function allVoices() { return ('speechSynthesis' in window) ? speechSynthesis.getVoices() : []; }
+            function voicesFor(code) {
+                return allVoices().filter(function (v) { return base(v.lang.replace('_', '-')) === base(code); });
+            }
+            function renderVoices() {
+                var f = from.value === 'auto' ? (last ? last.src : 'en') : from.value;
+                var codes = [f];
+                if (base(to.value) !== base(f)) codes.push(to.value);
+                document.getElementById('voiceList').innerHTML = codes.map(function (c) {
+                    var list = voicesFor(c);
+                    var opts = list.length
+                        ? '<option value="">Auto</option>' + list.map(function (v) {
+                            return '<option value="' + esc(v.voiceURI) + '"' + (prefs[base(c)] === v.voiceURI ? ' selected' : '') + '>' + esc(v.name) + '</option>';
+                        }).join('')
+                        : '<option value="">No voice installed</option>';
+                    return '<div class="voice-row"><label>' + esc(langName(c)) + '</label><select data-lang="' + esc(base(c)) + '">' + opts + '</select></div>';
+                }).join('');
+            }
+            document.getElementById('voiceList').addEventListener('change', function (e) {
+                var sel = e.target.closest('select'); if (!sel) return;
+                var l = sel.getAttribute('data-lang');
+                if (sel.value) prefs[l] = sel.value; else delete prefs[l];
+                try { localStorage.setItem('voicePrefs', JSON.stringify(prefs)); } catch (x) { }
+                if (last && base(last.to) === l) speak(last.out, last.to);
+                else if (last && base(last.src) === l) speak(last.text, last.src);
+            });
+            if ('speechSynthesis' in window) speechSynthesis.addEventListener('voiceschanged', renderVoices);
+            from.addEventListener('change', renderVoices);
+            to.addEventListener('change', renderVoices);
+            renderVoices();
+
+            function speak(text, code) {
+                if (!('speechSynthesis' in window)) { status.textContent = "Your browser doesn't support speech."; return; }
+                speechSynthesis.cancel();
+                var u = new SpeechSynthesisUtterance(text);
+                u.lang = ttsCode(code);
+                var pv = prefs[base(code)];
+                if (pv) { var vv = allVoices().find(function (x) { return x.voiceURI === pv; }); if (vv) { u.voice = vv; u.lang = vv.lang; } }
+                u.rate = voice.rate; u.pitch = voice.pitch; u.volume = voice.volume;
+                speechSynthesis.speak(u);
+            }
+
+            out.addEventListener('click', function (e) {
+                var b = e.target.closest('button'); if (!b || !last) return;
+                var a = b.getAttribute('data-act');
+                if (a === 'spk-src') speak(last.text, last.src);
+                else if (a === 'spk-out') speak(last.out, last.to);
+                else if (a === 'copy') { try { navigator.clipboard.writeText(last.out); status.textContent = 'Copied.'; } catch (x) { } }
+                else if (a === 'task') { newTodo(last.text + ' - ' + last.out, false); refresh(); status.textContent = 'Added to your study tasks.'; }
+            });
+
+            document.getElementById('trGo').addEventListener('click', run);
+            document.getElementById('trClear').addEventListener('click', function () {
+                input.value = ''; out.classList.remove('show'); status.textContent = ''; last = null; input.focus();
+            });
+            document.getElementById('trSwap').addEventListener('click', function () {
+                var f = from.value === 'auto' ? (last ? last.src.split('-')[0] : 'en') : from.value;
+                var t = to.value;
+                from.value = LANGS.some(function (l) { return l[0] === t; }) ? t : 'en';
+                to.value = LANGS.some(function (l) { return l[0] === f; }) ? f : 'en';
+                if (last) { input.value = last.out; run(); }
+            });
+            input.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); run(); } });
+        })();
+
+        load();
+        refresh();
+    </script>
+
+    <style>
+        #chatbot-widget {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000
+        }
+
+        #chatbot-toggle {
+            background: var(--accent);
+            color: var(--accent-text);
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .3);
+            font-size: 26px
+        }
+
+        #chatbot-panel {
+            display: none;
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 4px 32px rgba(0, 0, 0, .35);
+            width: 440px;
+            max-width: calc(100vw - 40px);
+            max-height: calc(100vh - 120px);
+            padding: 20px;
+            margin-top: 8px
+        }
+
+        #chatbot-messages {
+            height: 440px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+            font-size: 16px;
+            line-height: 1.5
+        }
+
+        #chatbot-input {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-size: 16px;
+            background: var(--surface);
+            color: var(--text)
+        }
+
+        #chatbot-send {
+            background: var(--accent);
+            color: var(--accent-text);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer
+        }
+    </style>
+    <div id="chatbot-widget">
+        <div id="chatbot-toggle"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z" />
+            </svg></div>
+        <div id="chatbot-panel">
+            <div id="chatbot-messages"></div>
+            <div style="display:flex;gap:6px;">
+                <input id="chatbot-input" type="text" placeholder="اكتب مهمة أو أمر...">
+                <button id="chatbot-send">إرسال</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const chatbotToggle = document.getElementById('chatbot-toggle');
+        const chatbotPanel = document.getElementById('chatbot-panel');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotSend = document.getElementById('chatbot-send');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+
+        chatbotToggle.onclick = function () {
+            chatbotPanel.style.display = chatbotPanel.style.display === 'none' || !chatbotPanel.style.display ? 'block' : 'none';
+        };
+        chatbotSend.onclick = handleChatbotSend;
+        chatbotInput.addEventListener('keypress', function (e) { if (e.key === 'Enter') handleChatbotSend(); });
+
+        var chatHistory = [];
+
+        function chatContext() {
+            var un = (typeof todos !== 'undefined' ? todos : []).filter(function (t) { return !t.completed; }).slice(0, 30)
+                .map(function (t) { return '- ' + t.text + (t.due ? ' (due ' + t.due + ')' : '') + (t.priority ? ' [' + t.priority + ']' : ''); }).join('\n');
+            var subs = (typeof subjects !== 'undefined' ? subjects : []).map(function (s) { return s.name; }).join(', ');
+            return 'Unfinished tasks:\n' + (un || '(none)') + '\nSubjects: ' + (subs || '(none)');
+        }
+
+        function handleChatbotSend() {
+            const msg = chatbotInput.value.trim();
+            if (!msg || chatbotSend.disabled) return;
+            appendChatbotMessage('أنت', msg, 'user');
+            chatbotInput.value = '';
+            if (typeof window.aiChat !== 'function') { addTodoFromChatbot(msg); return; }
+            chatHistory.push({ role: 'user', text: msg });
+            const pending = document.createElement('div');
+            pending.style.marginBottom = '6px';
+            pending.style.textAlign = 'left';
+            pending.innerHTML = '<b>…</b>';
+            chatbotMessages.appendChild(pending);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            chatbotSend.disabled = true;
+            window.aiChat(chatHistory.slice(-12), chatContext()).then(function (reply) {
+                chatHistory.push({ role: 'model', text: reply });
+                if (chatHistory.length > 24) chatHistory = chatHistory.slice(-24);
+                pending.remove();
+                appendChatbotMessage('Assistant', reply, 'bot');
+            }).catch(function (e) {
+                pending.remove();
+                appendChatbotMessage('Assistant', 'AI error: ' + (e && e.message ? e.message : 'failed'), 'bot');
+            }).then(function () { chatbotSend.disabled = false; });
+        }
+
+        function appendChatbotMessage(sender, text, type) {
+            const d = document.createElement('div');
+            d.style.marginBottom = '6px';
+            d.style.textAlign = type === 'user' ? 'right' : 'left';
+            d.innerHTML = '<b>' + esc(sender) + ':</b> ' + esc(text);
+            chatbotMessages.appendChild(d);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function addTodoFromChatbot(text) {
+            let items = [];
+            if (/([0-9]+[\-\.\)])|\n|،|,/.test(text)) {
+                items = text.split(/\n|،|,|\d+\s*[-\.\)]/).map(l => l.trim()).filter(Boolean);
+            } else { items = [text]; }
+            let added = 0;
+            for (let item of items) {
+                if (!item) continue;
+                let completed = false;
+                if (/^✅|✅$/.test(item.trim())) {
+                    completed = true;
+                    item = item.replace(/^✅\s*|\s*✅$/g, '').trim();
+                }
+                if (!item) continue;
+                newTodo(item, completed);
+                added++;
+            }
+            if (added > 0) {
+                refresh();
+                appendChatbotMessage('Chatbot', 'Added ' + added + ' task' + (added > 1 ? 's' : '') + ' to the list', 'bot');
+            } else {
+                appendChatbotMessage('Chatbot', 'No tasks recognized. Make sure to write a clear command.', 'bot');
+            }
+        }
+    </script>
+    <script>
+        var AR = {
+            'Focusly': 'فوكسلي', '© 2026 Focusly. All rights reserved.': '© 2026 فوكسلي. جميع الحقوق محفوظة.', 'Plan what to study, then focus with the timer': 'خطط لما ستذاكره ثم ركّز مع المؤقت',
+            'Study Tasks': 'مهام المذاكرة', 'Timer': 'المؤقت', 'Translator': 'المترجم', 'Schedule': 'الجدول',
+            'All': 'الكل', 'Active': 'النشطة', 'Completed': 'المكتملة', 'Search for a task...': 'ابحث عن مهمة...',
+            'What do you need to study?': 'ماذا تريد أن تذاكر؟', 'Add': 'إضافة', 'Save': 'حفظ', 'Priority:': 'الأولوية:',
+            'Low': 'منخفضة', 'Medium': 'متوسطة', 'High': 'عالية', 'Sort by:': 'ترتيب حسب:', 'Date': 'التاريخ', 'Priority': 'الأولوية',
+            'Clear Completed': 'مسح المكتملة', 'Edit': 'تعديل', 'Delete': 'حذف', 'No tasks found': 'لا توجد مهام',
+            'Add what you need to study to get started.': 'أضف ما تريد مذاكرته للبدء.',
+            'Countdown': 'عد تنازلي', 'Stopwatch': 'ساعة إيقاف', 'Hours': 'ساعات', 'Minutes': 'دقائق', 'Seconds': 'ثواني',
+            'Start': 'ابدأ', 'Pause': 'إيقاف مؤقت', 'Reset': 'إعادة', 'Zoom': 'تكبير', 'Exit': 'خروج',
+            "This session's tasks": 'مهام هذه الجلسة', 'Add a new task to this session...': 'أضف مهمة جديدة لهذه الجلسة...',
+            'Add from my tasks': 'إضافة من مهامي', 'No tasks yet. Add one above or pick from your study tasks.': 'لا توجد مهام بعد. أضف مهمة أو اختر من مهامك.',
+            'No other active tasks': 'لا توجد مهام نشطة أخرى', 'Remove from session': 'إزالة من الجلسة', 'Remove': 'إزالة',
+            'Detect language': 'تحديد اللغة تلقائيًا', 'English': 'الإنجليزية', 'Arabic': 'العربية', 'French': 'الفرنسية', 'Spanish': 'الإسبانية', 'German': 'الألمانية', 'Turkish': 'التركية', 'Italian': 'الإيطالية', 'Russian': 'الروسية', 'Japanese': 'اليابانية', 'Chinese': 'الصينية', 'Korean': 'الكورية',
+            'Type a word or sentence to translate...': 'اكتب كلمة أو جملة للترجمة...', 'Translate': 'ترجم', 'Clear': 'مسح', 'Voice': 'الصوت',
+            'Speed': 'السرعة', 'Pitch': 'النبرة', 'Volume': 'مستوى الصوت', 'Reset voice': 'إعادة ضبط الصوت', 'Auto': 'تلقائي', 'No voice installed': 'لا يوجد صوت مثبت',
+            'Listen': 'استماع', 'Copy': 'نسخ', 'Add to study tasks': 'إضافة إلى مهام المذاكرة', 'Translating...': 'جارٍ الترجمة...',
+            "Couldn't translate. Check your internet connection and try again.": 'تعذرت الترجمة. تأكد من الإنترنت وأعد المحاولة.',
+            'Copied.': 'تم النسخ.', 'Added to your study tasks.': 'أُضيفت إلى مهام المذاكرة.', "Your browser doesn't support speech.": 'متصفحك لا يدعم النطق.',
+            'Swap languages': 'تبديل اللغتين', 'From language': 'من لغة', 'To language': 'إلى لغة', 'Language': 'اللغة',
+            'Sunday': 'الأحد', 'Monday': 'الاثنين', 'Tuesday': 'الثلاثاء', 'Wednesday': 'الأربعاء', 'Thursday': 'الخميس', 'Friday': 'الجمعة', 'Saturday': 'السبت', 'Today': 'اليوم', 'Day': 'اليوم', 'Time': 'الوقت',
+            'Daily inspiration': 'إلهام اليوم', 'Another one': 'اقتباس آخر', 'Enable notifications': 'تفعيل الإشعارات', 'Send test': 'إرسال تجربة',
+            'Daily reminder at': 'تذكير يومي عند', "Remind me at each task's time": 'نبّهني عند وقت كل مهمة',
+            'No specific time': 'بدون وقت محدد', 'Skip ahead': 'تقديم الوقت', '+1 min': '+1 دقيقة', '+5 min': '+5 دقائق', '+10 min': '+10 دقائق', 'Skip break': 'تخطي الاستراحة', 'Take breaks': 'أخذ استراحات', 'Every': 'كل', 'Break length': 'مدة الاستراحة', 'min': 'دقيقة', 'Tick sound': 'صوت المؤقت', 'Ambient sound': 'صوت هادئ', 'Off': 'إيقاف', 'Rain': 'مطر', 'Waves': 'أمواج', 'Wind': 'رياح', 'Forest': 'غابة', 'Stream': 'جدول ماء', 'Preview': 'معاينة', 'Stop': 'إيقاف', 'Focus': 'تركيز', 'Break': 'استراحة', 'My study tasks': 'مهامي للمذاكرة', 'Schedule day': 'يوم من الجدول', 'Add a task to this day...': 'أضف مهمة لهذا اليوم...', 'Nothing scheduled for this day.': 'لا توجد مهام مجدولة لهذا اليوم.', 'Task for this day...': 'مهمة لهذا اليوم...', 'Add to schedule': 'إضافة إلى الجدول',
+            'Notifications are on.': 'الإشعارات مفعّلة.', 'Notifications are off.': 'الإشعارات غير مفعّلة.',
+            'Notifications are blocked. Allow them from your browser settings.': 'الإشعارات محظورة. اسمح بها من إعدادات المتصفح.',
+            'Notifications are not supported in this browser.': 'هذا المتصفح لا يدعم الإشعارات.',
+            'Are you sure you want to delete this task?': 'هل أنت متأكد من حذف هذه المهمة؟', 'Do you want to delete all completed tasks?': 'هل تريد حذف كل المهام المكتملة؟',
+            'Chatbot': 'الشات بوت', 'No tasks recognized. Make sure to write a clear command.': 'لم يتم التعرف على مهام لإضافتها. تأكد من كتابة أمر واضح.'
+        };
+        var LANG = localStorage.getItem('lang') || ((navigator.language || '').toLowerCase().indexOf('ar') === 0 ? 'ar' : 'en');
+        var origText = new WeakMap();
+        function trStr(s) {
+            if (AR[s] !== undefined) return AR[s];
+            var m;
+            if ((m = s.match(/^(\d+) \/ (\d+) done$/))) return m[1] + ' / ' + m[2] + ' منجز';
+            if ((m = s.match(/^Added (\d+) tasks? to the list$/))) return 'تمت إضافة ' + m[1] + ' مهمة إلى القائمة';
+            return null;
+        }
+        function T(s) { return LANG === 'ar' && AR[s] !== undefined ? AR[s] : s; }
+        function xText(n) {
+            var v = n.nodeValue, t = v.trim(); if (!t) return;
+            var r = trStr(t);
+            if (r !== null) { origText.set(n, v); n.nodeValue = v.replace(t, function () { return r; }); }
+        }
+        var ATTRS = ['placeholder', 'title', 'aria-label'];
+        function xAttrs(el) {
+            ATTRS.forEach(function (a) {
+                if (!el.hasAttribute(a) || el.hasAttribute('data-en-' + a)) return;
+                var v = el.getAttribute(a), r = trStr(v.trim());
+                if (r !== null) { el.setAttribute('data-en-' + a, v); el.setAttribute(a, r); }
+            });
+        }
+        function textWalker(root) {
+            return document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+                acceptNode: function (n) {
+                    return n.parentNode && /^(SCRIPT|STYLE|TEXTAREA)$/.test(n.parentNode.tagName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+                }
+            });
+        }
+        function xTree(root) {
+            if (root.nodeType === 3) { xText(root); return; }
+            if (root.nodeType !== 1 || /^(SCRIPT|STYLE)$/.test(root.tagName)) return;
+            if (root.matches('[placeholder],[title],[aria-label]')) xAttrs(root);
+            root.querySelectorAll('[placeholder],[title],[aria-label]').forEach(xAttrs);
+            var w = textWalker(root), n, list = [];
+            while ((n = w.nextNode())) list.push(n);
+            list.forEach(xText);
+        }
+        function revertTree() {
+            var w = textWalker(document.body), n, list = [];
+            while ((n = w.nextNode())) list.push(n);
+            list.forEach(function (n) {
+                if (!origText.has(n)) return;
+                var prev = origText.get(n), tr = trStr(prev.trim());
+                if (tr !== null && n.nodeValue.trim() === tr) n.nodeValue = prev;
+                origText.delete(n);
+            });
+            document.querySelectorAll('[data-en-placeholder],[data-en-title],[data-en-aria-label]').forEach(function (el) {
+                ATTRS.forEach(function (a) {
+                    if (el.hasAttribute('data-en-' + a)) { el.setAttribute(a, el.getAttribute('data-en-' + a)); el.removeAttribute('data-en-' + a); }
+                });
+            });
+        }
+        new MutationObserver(function (muts) {
+            if (LANG !== 'ar') return;
+            muts.forEach(function (m) {
+                if (m.type === 'characterData') xText(m.target);
+                else m.addedNodes.forEach(xTree);
+            });
+        }).observe(document.body, { childList: true, subtree: true, characterData: true });
+
+        function applyLang(l) {
+            LANG = l;
+            try { localStorage.setItem('lang', l); } catch (e) { }
+            var root = document.documentElement;
+            root.setAttribute('lang', l);
+            root.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+            document.getElementById('langBtn').textContent = l === 'ar' ? 'EN' : 'العربية';
+            if (l === 'ar') { xTree(document.body); document.title = AR['Focusly']; }
+            else { revertTree(); document.title = 'Focusly'; }
+            renderQuote(); notifUI(); renderSession(); if (window.renderStats) window.renderStats(); if (window.renderSubj) window.renderSubj();
+        }
+        document.getElementById('langBtn').addEventListener('click', function () { applyLang(LANG === 'ar' ? 'en' : 'ar'); });
+
+        var Q = [
+            { k: 'quran', ar: 'وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ', sa: 'سورة النجم: 39', se: 'Quran 53:39', en: 'And that man will have nothing except what he strives for.' },
+            { k: 'quran', ar: 'فَإِنَّ مَعَ الْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ الْعُسْرِ يُسْرًا', sa: 'سورة الشرح: 5-6', se: 'Quran 94:5-6', en: 'Indeed, with hardship comes ease. Indeed, with hardship comes ease.' },
+            { k: 'quran', ar: 'وَقُل رَّبِّ زِدْنِي عِلْمًا', sa: 'سورة طه: 114', se: 'Quran 20:114', en: 'And say: My Lord, increase me in knowledge.' },
+            { k: 'quran', ar: 'إِنَّ اللَّهَ لَا يُغَيِّرُ مَا بِقَوْمٍ حَتَّىٰ يُغَيِّرُوا مَا بِأَنفُسِهِمْ', sa: 'سورة الرعد: 11', se: 'Quran 13:11', en: 'Indeed, Allah will not change the condition of a people until they change what is in themselves.' },
+            { k: 'quran', ar: 'وَقُلِ اعْمَلُوا فَسَيَرَى اللَّهُ عَمَلَكُمْ وَرَسُولُهُ وَالْمُؤْمِنُونَ', sa: 'سورة التوبة: 105', se: 'Quran 9:105', en: 'And say: Act, for Allah will see your deeds, and so will His Messenger and the believers.' },
+            { k: 'quran', ar: 'وَالَّذِينَ جَاهَدُوا فِينَا لَنَهْدِيَنَّهُمْ سُبُلَنَا', sa: 'سورة العنكبوت: 69', se: 'Quran 29:69', en: 'And those who strive for Us, We will surely guide them to Our ways.' },
+            { k: 'quran', ar: 'يَرْفَعِ اللَّهُ الَّذِينَ آمَنُوا مِنكُمْ وَالَّذِينَ أُوتُوا الْعِلْمَ دَرَجَاتٍ', sa: 'سورة المجادلة: 11', se: 'Quran 58:11', en: 'Allah will raise those among you who believe, and those who were given knowledge, by degrees.' },
+            { k: 'quran', ar: 'لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا', sa: 'سورة البقرة: 286', se: 'Quran 2:286', en: 'Allah does not burden a soul beyond what it can bear.' },
+            { k: 'hadith', ar: 'احرص على ما ينفعك، واستعن بالله ولا تعجز', sa: 'رواه مسلم', se: 'Narrated by Muslim', en: 'Be keen on what benefits you, seek help from Allah, and do not give up.' },
+            { k: 'hadith', ar: 'من سلك طريقًا يلتمس فيه علمًا سهّل الله له به طريقًا إلى الجنة', sa: 'رواه مسلم', se: 'Narrated by Muslim', en: 'Whoever takes a path seeking knowledge, Allah makes easy for him a path to Paradise.' },
+            { k: 'hadith', ar: 'أحب الأعمال إلى الله أدومها وإن قلّ', sa: 'متفق عليه', se: 'Agreed upon (Bukhari and Muslim)', en: 'The most beloved deeds to Allah are the most consistent, even if small.' },
+            { k: 'hadith', ar: 'المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف، وفي كل خير', sa: 'رواه مسلم', se: 'Narrated by Muslim', en: 'The strong believer is better and more beloved to Allah than the weak believer, though there is good in both.' },
+            { k: 'hadith', ar: 'إن الله يحب إذا عمل أحدكم عملًا أن يتقنه', sa: 'رواه البيهقي', se: 'Narrated by al-Bayhaqi', en: 'Allah loves that when one of you does a task, he does it with excellence.' },
+            { k: 'hadith', ar: 'طلب العلم فريضة على كل مسلم', sa: 'رواه ابن ماجه', se: 'Narrated by Ibn Majah', en: 'Seeking knowledge is an obligation upon every Muslim.' },
+            { k: 'tip', ar: 'حاول وعافر، فالنجاح يأتي لمن لا يستسلم.', en: 'Keep trying and keep fighting. Success comes to those who do not give up.' },
+            { k: 'tip', ar: 'خطوة صغيرة اليوم أفضل من خطة كبيرة تؤجلها غدًا.', en: 'One small step today beats a big plan postponed to tomorrow.' },
+            { k: 'tip', ar: 'التعب مؤقت، والإنجاز يبقى.', en: 'The tiredness is temporary, the achievement stays.' },
+            { k: 'tip', ar: 'لا تؤجل عمل اليوم إلى الغد، ابدأ الآن ولو بعشر دقائق.', en: "Don't put off today's work. Start now, even for ten minutes." },
+            { k: 'tip', ar: 'أنت أقرب إلى هدفك مما تظن، فاصبر وواصل.', en: 'You are closer to your goal than you think. Be patient and keep going.' }
+        ];
+        var curQ = Math.floor(Math.random() * Q.length);
+        function renderQuote() {
+            var q = Q[curQ], h;
+            if (q.k === 'tip') h = '<div class="q-tip">' + esc(LANG === 'ar' ? q.ar : q.en) + '</div>';
+            else {
+                var o = q.k === 'quran' ? '﴿' : '«', c = q.k === 'quran' ? '﴾' : '»';
+                h = '<div class="q-ar" dir="rtl">' + o + ' ' + esc(q.ar) + ' ' + c + '</div><div class="q-src">' + esc(LANG === 'ar' ? q.sa : q.se) + '</div>' +
+                    (LANG === 'en' ? '<div class="q-en">' + esc(q.en) + '</div>' : '');
+            }
+            document.getElementById('quoteBody').innerHTML = h;
+        }
+        function quotePlain(q) {
+            if (q.k === 'tip') return LANG === 'ar' ? q.ar : q.en;
+            var o = q.k === 'quran' ? '﴿' : '«', c = q.k === 'quran' ? '﴾' : '»';
+            return o + ' ' + q.ar + ' ' + c + ' (' + (LANG === 'ar' ? q.sa : q.se) + ')' + (LANG === 'en' ? '\n' + q.en : '');
+        }
+        document.getElementById('quoteNext').addEventListener('click', function () {
+            var n; do { n = Math.floor(Math.random() * Q.length); } while (n === curQ && Q.length > 1);
+            curQ = n; renderQuote();
+        });
+
+        var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        var sched = null;
+        try { sched = JSON.parse(localStorage.getItem('schedule')); } catch (e) { }
+        if (!sched || typeof sched !== 'object') sched = {};
+        for (var di = 0; di < 7; di++) if (!Array.isArray(sched[di])) sched[di] = [];
+        function saveSched() { try { localStorage.setItem('schedule', JSON.stringify(sched)); } catch (e) { } }
+
+        document.getElementById('schDay').innerHTML = DAYS.map(function (n, i) { return '<option value="' + i + '">' + n + '</option>'; }).join('');
+        document.getElementById('schDay').value = new Date().getDay();
+        document.getElementById('srcDay').innerHTML = DAYS.map(function (n, i) { return '<option value="' + i + '">' + n + '</option>'; }).join('');
+
+        function renderSchedule() {
+            var today = new Date().getDay();
+            var h = '<tbody>' + DAYS.map(function (n, d) {
+                var list = sched[d].slice().sort(function (x, y) {
+                    if (!x.time && !y.time) return 0;
+                    if (!x.time) return 1; if (!y.time) return -1;
+                    return x.time < y.time ? -1 : x.time > y.time ? 1 : 0;
+                });
+                var cls = d === today ? ' today' : '';
+                var tot = list.length, dn = list.filter(function (x) { return x.done; }).length;
+                var cells = list.length ? '<td class="' + cls.trim() + '"><div class="sch-row">' + list.map(function (t) {
+                    return '<div class="sch-task' + (t.done ? ' done' : '') + '"><div class="checkbox' + (t.done ? ' checked' : '') + '" onclick="schToggle(' + d + ',' + t.id + ')"></div>' +
+                        '<div class="sch-info">' + (t.time ? '<span class="sch-time">' + esc(t.time) + '</span>' : '') + '<span class="todo-text">' + esc(t.text) + '</span></div>' +
+                        '<button class="remove-btn" title="Remove" onclick="schRemove(' + d + ',' + t.id + ')">×</button></div>';
+                }).join('') + '</div></td>' : '<td class="none' + cls + '">—</td>';
+                return '<tr><th class="day' + cls + '">' + n + (d === today ? '<small>Today</small>' : '') + '</th>' + cells +
+                    '<td class="count' + cls + '">' + (tot ? dn + ' / ' + tot + ' done' : '') + '</td></tr>';
+            }).join('') + '</tbody>';
+            document.getElementById('schTable').innerHTML = h;
+        }
+        function schToggle(d, id) { sched[d].forEach(function (t) { if (t.id === id) t.done = !t.done; }); saveSched(); renderSchedule(); renderSession(); }
+        function schRemove(d, id) { sched[d] = sched[d].filter(function (t) { return t.id !== id; }); saveSched(); renderSchedule(); renderSession(); }
+        function schAdd() {
+            var inp = document.getElementById('schText'), text = inp.value.trim();
+            if (!text) return;
+            var d = parseInt(document.getElementById('schDay').value);
+            sched[d].push({ id: Date.now() + Math.floor(Math.random() * 1000), text: text, time: document.getElementById('schNoTime').checked ? '' : (document.getElementById('schTime').value || ''), done: false });
+            inp.value = ''; saveSched(); renderSchedule(); renderSession();
+        }
+        document.getElementById('schNoTime').addEventListener('change', function (e) {
+            var ti = document.getElementById('schTime');
+            ti.disabled = e.target.checked;
+            if (e.target.checked) ti.value = '';
+        });
+        document.getElementById('schAdd').addEventListener('click', schAdd);
+        document.getElementById('schText').addEventListener('keypress', function (e) { if (e.key === 'Enter') schAdd(); });
+
+        var nset = { daily: true, time: '08:00', task: true };
+        try { var ns = JSON.parse(localStorage.getItem('notifSettings')); if (ns) nset = ns; } catch (e) { }
+        function saveN() { try { localStorage.setItem('notifSettings', JSON.stringify(nset)); } catch (e) { } }
+        function notifUI() {
+            var st = document.getElementById('notifStatus'), en = document.getElementById('notifEnable');
+            var txt, granted = false;
+            if (!('Notification' in window)) txt = 'Notifications are not supported in this browser.';
+            else if (Notification.permission === 'granted') { txt = 'Notifications are on.'; granted = true; }
+            else if (Notification.permission === 'denied') txt = 'Notifications are blocked. Allow them from your browser settings.';
+            else txt = 'Notifications are off.';
+            st.textContent = txt;
+            en.style.display = granted || !('Notification' in window) ? 'none' : '';
+            document.getElementById('nDaily').checked = !!nset.daily;
+            document.getElementById('nTime').value = nset.time;
+            document.getElementById('nTask').checked = !!nset.task;
+        }
+        function notify(title, body) {
+            if (!('Notification' in window) || Notification.permission !== 'granted') return;
+            try { new Notification(title, { body: body, dir: LANG === 'ar' ? 'rtl' : 'ltr', lang: LANG }); } catch (e) { }
+        }
+        function tasksMsg(n) {
+            if (LANG === 'ar') return 'لديك ' + (n === 1 ? 'مهمة واحدة' : n === 2 ? 'مهمتان' : n <= 10 ? n + ' مهام' : n + ' مهمة') + ' يجب إنجازها اليوم';
+            return 'You have ' + n + ' task' + (n > 1 ? 's' : '') + ' to complete today';
+        }
+        function randQuote() { return quotePlain(Q[Math.floor(Math.random() * Q.length)]); }
+        function pendingToday() { return sched[new Date().getDay()].filter(function (t) { return !t.done; }); }
+        function mins(hm) { var p = hm.split(':'); return (+p[0]) * 60 + (+p[1]); }
+
+        document.getElementById('notifEnable').addEventListener('click', function () {
+            if (!('Notification' in window)) return;
+            Notification.requestPermission().then(notifUI);
+        });
+        document.getElementById('notifTest').addEventListener('click', function () {
+            if (!('Notification' in window)) return;
+            var go = function () {
+                var n = todos.filter(function (t) { return !t.completed; }).length || pendingToday().length;
+                notify(n ? tasksMsg(n) : (LANG === 'ar' ? 'تنبيه تجريبي' : 'Test notification'), randQuote());
+            };
+            if (Notification.permission === 'granted') go();
+            else Notification.requestPermission().then(function () { notifUI(); go(); });
+        });
+        document.getElementById('nDaily').addEventListener('change', function (e) { nset.daily = e.target.checked; saveN(); });
+        document.getElementById('nTask').addEventListener('change', function (e) { nset.task = e.target.checked; saveN(); });
+        document.getElementById('nTime').addEventListener('change', function (e) { nset.time = e.target.value || '08:00'; saveN(); });
+
+        function checkNotifs() {
+            if (!('Notification' in window) || Notification.permission !== 'granted') return;
+            var now = new Date(), ds = now.toDateString();
+            var hm = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+            var fired = {};
+            try { fired = JSON.parse(localStorage.getItem('notifFired')) || {}; } catch (e) { }
+            Object.keys(fired).forEach(function (k) { if (k.split('|').pop() !== ds) delete fired[k]; });
+            var p = pendingToday();
+            var n = todos.filter(function (t) { return !t.completed; }).length || p.length;
+            if (nset.daily && hm >= nset.time && !fired['d|' + ds]) {
+                fired['d|' + ds] = 1;
+                if (n) notify(tasksMsg(n), randQuote());
+            }
+            if (nset.task) p.forEach(function (t) {
+                var key = 't|' + t.id + '|' + ds;
+                if (!t.time || hm < t.time || fired[key]) return;
+                fired[key] = 1;
+                if (mins(hm) - mins(t.time) <= 30) notify((LANG === 'ar' ? 'حان وقت: ' : 'Time for: ') + t.text, randQuote());
+            });
+            try { localStorage.setItem('notifFired', JSON.stringify(fired)); } catch (e) { }
+        }
+
+        /* ===== Statistics ===== */
+        (function () {
+            var add = {
+                'Statistics': 'إحصائيات', 'Total study time': 'إجمالي وقت المذاكرة', 'Today': 'اليوم', 'Last 7 days': 'آخر 7 أيام',
+                'Tasks done': 'مهام منجزة', 'Not done': 'لم تُنجز', 'Completion rate': 'نسبة الإنجاز', 'Progress curve': 'منحنى التقدم',
+                'Study hours': 'ساعات المذاكرة', 'Completed tasks': 'المهام المنجزة', '7 days': '7 أيام', '30 days': '30 يومًا',
+                'Study time is counted while the timer is running.': 'يُحتسب وقت المذاكرة أثناء تشغيل المؤقت.'
+            };
+            for (var k in add) if (!(k in AR)) AR[k] = add[k];
+
+            var range = 7, metric = 'hours';
+            var $ = function (id) { return document.getElementById(id); };
+            function L(en, ar) { return LANG === 'ar' ? ar : en; }
+            function fmtDur(ms) {
+                var m = Math.round(ms / 60000), h = Math.floor(m / 60); m = m % 60;
+                if (ms > 0 && h === 0 && m === 0) return L('<1m', 'أقل من دقيقة');
+                return LANG === 'ar' ? (h ? h + ' س ' : '') + m + ' د' : (h ? h + 'h ' : '') + m + 'm';
+            }
+            function dateAgo(n) { var d = new Date(); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() - n); return d; }
+            function smooth(p, top, bottom) {
+                if (p.length < 2) return '';
+                var d = 'M' + p[0].x.toFixed(1) + ',' + p[0].y.toFixed(1);
+                function cl(y) { return Math.min(bottom, Math.max(top, y)); }
+                for (var i = 0; i < p.length - 1; i++) {
+                    var p0 = p[i - 1] || p[i], p1 = p[i], p2 = p[i + 1], p3 = p[i + 2] || p2;
+                    d += ' C' + (p1.x + (p2.x - p0.x) / 6).toFixed(1) + ',' + cl(p1.y + (p2.y - p0.y) / 6).toFixed(1) +
+                        ' ' + (p2.x - (p3.x - p1.x) / 6).toFixed(1) + ',' + cl(p2.y - (p3.y - p1.y) / 6).toFixed(1) +
+                        ' ' + p2.x.toFixed(1) + ',' + p2.y.toFixed(1);
+                }
+                return d;
+            }
+            function chart() {
+                var W = 600, H = 260, pl = 44, pr = 16, pt = 26, pb = 34, iw = W - pl - pr, ih = H - pt - pb, bottom = pt + ih;
+                var loc = LANG === 'ar' ? 'ar-u-nu-latn' : 'en-US', hrs = metric === 'hours';
+                var vals = [], dates = [], i;
+                for (i = range - 1; i >= 0; i--) {
+                    var d = dateAgo(i), key = dayKey(d); dates.push(d);
+                    vals.push(hrs ? (studyLog[key] || 0) / 3600000 : (doneLog[key] || 0));
+                }
+                var mx = Math.max.apply(null, vals), top, ticks = 4;
+                if (hrs) {
+                    var set = [1, 2, 4, 8, 12, 16, 20, 24]; top = 24;
+                    for (i = 0; i < set.length; i++) if (mx <= set[i]) { top = set[i]; break; }
+                    if (top === 1) ticks = 2;
+                } else top = Math.max(4, Math.ceil(mx / 4) * 4);
+
+                var g = '';
+                for (i = 0; i <= ticks; i++) {
+                    var v = top * i / ticks, y = bottom - (v / top) * ih;
+                    g += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + y + '" y2="' + y + '" stroke="var(--border)" stroke-width="1"' + (i ? ' stroke-dasharray="4 4"' : '') + '/>' +
+                        '<text x="' + (pl - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" fill="var(--muted)">' + (hrs ? (v % 1 ? v.toFixed(1) : v) + L('h', 'س') : v) + '</text>';
+                }
+                var pts = vals.map(function (val, j) {
+                    return { x: pl + (range === 1 ? 0 : j * iw / (range - 1)), y: bottom - (val / top) * ih, v: val };
+                });
+                var line = smooth(pts, pt, bottom);
+                g += '<path d="' + line + ' L' + pts[pts.length - 1].x.toFixed(1) + ',' + bottom + ' L' + pts[0].x.toFixed(1) + ',' + bottom + ' Z" fill="var(--accent)" opacity=".12"/>';
+                g += '<path d="' + line + '" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
+                pts.forEach(function (p, j) {
+                    var show = range === 7 || (range - 1 - j) % 5 === 0;
+                    var label = range === 7 ? dates[j].toLocaleDateString(loc, { weekday: 'short' }) : dates[j].getDate();
+                    var tip = dates[j].toLocaleDateString(loc, { day: 'numeric', month: 'short' }) + ': ' + (hrs ? fmtDur(p.v * 3600000) : p.v);
+                    g += '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + (range === 7 ? 4.5 : 3) + '" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"><title>' + tip + '</title></circle>';
+                    if (show) g += '<text x="' + p.x.toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="11" fill="var(--muted)">' + label + '</text>';
+                    if (range === 7 && p.v > 0) {
+                        var ty = p.y - 10 < pt - 4 ? p.y + 18 : p.y - 10;
+                        g += '<text x="' + p.x.toFixed(1) + '" y="' + ty.toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="var(--text)">' + (hrs ? fmtDur(p.v * 3600000) : p.v) + '</text>';
+                    }
+                });
+                if (mx === 0) g += '<text x="' + W / 2 + '" y="' + (pt + ih / 2) + '" text-anchor="middle" font-size="13" fill="var(--muted)">' + L('Start the timer or finish a task to see your progress here.', 'ابدأ المؤقت أو أنجز مهمة لترى تقدمك هنا.') + '</text>';
+                $('stChart').innerHTML = g;
+            }
+            function weekly() {
+                var loc = LANG === 'ar' ? 'ar-u-nu-latn' : 'en-US', i, a = 0, b = 0, da = 0, db = 0, best = -1, bi = 0;
+                for (i = 0; i < 7; i++) {
+                    var k1 = dayKey(dateAgo(i)), k2 = dayKey(dateAgo(i + 7)), v = studyLog[k1] || 0;
+                    a += v; b += studyLog[k2] || 0; da += doneLog[k1] || 0; db += doneLog[k2] || 0;
+                    if (v > best) { best = v; bi = i; }
+                }
+                function cmp(x, y) {
+                    if (!y) return x ? L('New this week', 'جديد هذا الأسبوع') : '—';
+                    var p = Math.round((x - y) / y * 100);
+                    return (p > 0 ? '▲ ' : p < 0 ? '▼ ' : '= ') + Math.abs(p) + '% ' + L('vs last week', 'مقارنة بالأسبوع الماضي');
+                }
+                function card(v, l, s) { return '<div class="st-card"><div class="st-val">' + v + '</div><div class="st-lbl">' + l + '</div><div class="st-sub">' + (s || '&nbsp;') + '</div></div>'; }
+                $('wkGrid').innerHTML =
+                    card(fmtDur(a), L('This week', 'هذا الأسبوع'), cmp(a, b)) +
+                    card(fmtDur(b), L('Last week', 'الأسبوع الماضي')) +
+                    card(fmtDur(a / 7), L('Daily average', 'متوسط الساعات اليومية')) +
+                    card(best > 0 ? dateAgo(bi).toLocaleDateString(loc, { weekday: 'long' }) : '—', L('Best day', 'أفضل يوم'), best > 0 ? fmtDur(best) : '') +
+                    card(da, L('Tasks done this week', 'مهام منجزة هذا الأسبوع'), cmp(da, db));
+            }
+            function heat() {
+                var cell = 14, gap = 3, weeks = 18, step = cell + gap, pt = 16, W = weeks * step, H = pt + 7 * step + 26;
+                var loc = LANG === 'ar' ? 'ar-u-nu-latn' : 'en-US', dow = dateAgo(0).getDay(), g = '', op = [0, .22, .4, .6, .8, 1], lastM = -1, c, r;
+                for (c = 0; c < weeks; c++) {
+                    for (r = 0; r < 7; r++) {
+                        var off = (weeks - 1 - c) * 7 + (dow - r); if (off < 0) continue;
+                        var d = dateAgo(off), v = (studyLog[dayKey(d)] || 0) / 3600000;
+                        var lv = v <= 0 ? 0 : v < .5 ? 1 : v < 1 ? 2 : v < 2 ? 3 : v < 4 ? 4 : 5;
+                        g += '<rect x="' + c * step + '" y="' + (pt + r * step) + '" width="' + cell + '" height="' + cell + '" rx="3" fill="' + (lv ? 'var(--accent)' : 'var(--border)') + '" opacity="' + (lv ? op[lv] : .6) + '"><title>' + d.toLocaleDateString(loc, { day: 'numeric', month: 'short' }) + ': ' + fmtDur(v * 3600000) + '</title></rect>';
+                        if (r === 0 && d.getMonth() !== lastM) { lastM = d.getMonth(); g += '<text x="' + c * step + '" y="10" font-size="10" fill="var(--muted)">' + d.toLocaleDateString(loc, { month: 'short' }) + '</text>'; }
+                    }
+                }
+                var lx = W - 6 * step - 60;
+                g += '<text x="' + lx + '" y="' + (H - 3) + '" font-size="10" fill="var(--muted)" text-anchor="end">' + L('Less', 'أقل') + '</text>';
+                for (c = 0; c < 6; c++) g += '<rect x="' + (lx + 6 + c * step) + '" y="' + (H - 13) + '" width="' + cell + '" height="' + cell + '" rx="3" fill="' + (c ? 'var(--accent)' : 'var(--border)') + '" opacity="' + (c ? op[c] : .6) + '"/>';
+                g += '<text x="' + (lx + 12 + 6 * step) + '" y="' + (H - 3) + '" font-size="10" fill="var(--muted)">' + L('More', 'أكثر') + '</text>';
+                $('hmChart').setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+                $('hmChart').innerHTML = g;
+            }
+            function render() {
+                if (!$('stChart')) return;
+                var total = 0, key, i, week = 0;
+                for (key in studyLog) total += studyLog[key] || 0;
+                for (i = 0; i < 7; i++) week += studyLog[dayKey(dateAgo(i))] || 0;
+                var done = todos.filter(function (t) { return t.completed; }).length, all = todos.length;
+                var rate = all ? Math.round(done / all * 100) : 0;
+                $('stTotal').textContent = fmtDur(total);
+                $('stToday').textContent = fmtDur(studyLog[dayKey()] || 0);
+                $('stWeek').textContent = fmtDur(week);
+                $('stDone').textContent = done;
+                $('stLeft').textContent = all - done;
+                $('stRate').textContent = rate + '%';
+                $('stBar').style.width = rate + '%';
+                var st = 0, sd = 0;
+                for (i = 0; i < 7; i++) (sched[i] || []).forEach(function (t) { st++; if (t.done) sd++; });
+                $('stSched').textContent = st ? L('Schedule tasks: ' + sd + ' / ' + st + ' done', 'مهام الجدول: ' + sd + ' / ' + st + ' منجزة') : '';
+                chart(); weekly(); heat();
+            }
+            window.renderStats = render;
+
+            function seg(id, attr, set) {
+                $(id).addEventListener('click', function (e) {
+                    var b = e.target.closest('button'); if (!b) return;
+                    $(id).querySelectorAll('button').forEach(function (x) { x.classList.toggle('active', x === b); });
+                    set(b.getAttribute(attr)); render();
+                });
+            }
+            seg('stMetric', 'data-m', function (v) { metric = v; });
+            seg('stRange', 'data-r', function (v) { range = parseInt(v); });
+            document.querySelector('[data-tab="statsTab"]').addEventListener('click', render);
+            var _us = window.updateStats;
+            if (_us) window.updateStats = function () { _us.apply(this, arguments); render(); };
+            setInterval(function () { if ($('statsTab').classList.contains('active')) render(); }, 5000);
+        })();
+
+        /* ===== Subjects, smart planner, overdue reminders ===== */
+        (function () {
+            var add = {
+                'Subjects': 'المواد', 'Due date': 'تاريخ الاستحقاق', 'Subject name...': 'اسم المادة...', 'Smart planner': 'المخطط الذكي',
+                'Builds a weekly plan from your unfinished tasks, due dates and priority.': 'يبني خطة أسبوعية من مهامك غير المنجزة ومواعيدها وأولويتها.',
+                'Hours per day': 'ساعات متاحة يوميًا', 'Minutes per task': 'دقائق لكل مهمة', 'Start time': 'وقت البدء', 'Build plan': 'ابنِ الخطة', 'Build with AI': 'ابنِ بالذكاء الاصطناعي',
+                'Apply to schedule': 'أضف إلى الجدول', 'Weekly report': 'التقرير الأسبوعي', 'Activity map': 'خريطة النشاط'
+            };
+            for (var k in add) if (!(k in AR)) AR[k] = add[k];
+
+            var $ = function (id) { return document.getElementById(id); };
+            function L(en, ar) { return LANG === 'ar' ? ar : en; }
+            function subjOf(id) { for (var i = 0; i < subjects.length; i++) if (subjects[i].id === id) return subjects[i]; return null; }
+
+            /* ----- subjects + notes ----- */
+            function fillSel() {
+                var sel = $('todoSubj'), cur = sel.value;
+                sel.innerHTML = '<option value="">' + L('No subject', 'بدون مادة') + '</option>' + subjects.map(function (s) { return '<option value="' + esc(s.id) + '">' + esc(s.name) + '</option>'; }).join('');
+                sel.value = cur;
+            }
+            function linksHtml(n) {
+                var m = String(n || '').match(/https?:\/\/[^\s<>"')]+/g) || [], seen = {}, h = '';
+                m.forEach(function (u) { if (!seen[u]) { seen[u] = 1; h += '<a href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">' + esc(u) + '</a>'; } });
+                return h;
+            }
+            function card(s) {
+                var tk = todos.filter(function (t) { return t.subj === s.id; }), dn = tk.filter(function (t) { return t.completed; }).length;
+                return '<div class="sj-card" data-id="' + esc(s.id) + '" style="border-inline-start-color:' + esc(s.color) + '"><div class="sj-head"><b>' + esc(s.name) + '</b><span class="sj-stat">' +
+                    L(dn + ' / ' + tk.length + ' tasks done', dn + ' / ' + tk.length + ' مهمة منجزة') + '</span><button class="st-b" data-quiz="' + esc(s.id) + '">' + L('AI quiz', 'اختبار ذكي') + '</button><button class="remove-btn" data-del="' + esc(s.id) + '" title="' + L('Delete', 'حذف') + '">×</button></div>' +
+                    '<textarea class="sj-notes" placeholder="' + L('Notes, summaries, links...', 'ملاحظات وتلخيصات وروابط...') + '">' + esc(s.notes || '') + '</textarea><div class="sj-links">' + linksHtml(s.notes) + '</div>' + quizHtml(s.id) + '</div>';
+            }
+            function renderSubj(force) {
+                fillSel();
+                var a = document.activeElement;
+                if (!force && a && a.classList && a.classList.contains('sj-notes')) return;
+                $('sjList').innerHTML = subjects.length ? subjects.map(card).join('') :
+                    '<div class="st-note">' + L('Add your first subject to keep its notes and tasks together.', 'أضف مادتك الأولى لتجمع ملاحظاتها ومهامها في مكان واحد.') + '</div>';
+            }
+            function addSubj() {
+                var n = $('sjName').value.trim(); if (!n) return;
+                subjects.push({ id: String(Date.now()), name: n, color: $('sjColor').value || '#8b5cf6', notes: '' });
+                $('sjName').value = ''; save(); renderSubj();
+            }
+            var tmr;
+            $('sjList').addEventListener('input', function (e) {
+                var ta = e.target; if (!ta.classList.contains('sj-notes')) return;
+                var c = ta.closest('.sj-card'), s = subjOf(c.getAttribute('data-id')); if (!s) return;
+                s.notes = ta.value; c.querySelector('.sj-links').innerHTML = linksHtml(s.notes);
+                clearTimeout(tmr); tmr = setTimeout(function () { save(); }, 600);
+            });
+            $('sjList').addEventListener('click', function (e) {
+                var qb = e.target.closest('[data-quiz]'); if (qb) { startQuiz(qb.getAttribute('data-quiz')); return; }
+                var op = e.target.closest('.qz-o');
+                if (op) { var qq = quizzes[op.getAttribute('data-qid')]; if (qq && qq.qs) { qq.ans[+op.getAttribute('data-qi')] = +op.getAttribute('data-oj'); renderSubj(true); } return; }
+                var b = e.target.closest('[data-del]'); if (!b) return;
+                if (!confirm(L('Delete this subject and its notes?', 'حذف هذه المادة وملاحظاتها؟'))) return;
+                var id = b.getAttribute('data-del');
+                subjects = subjects.filter(function (s) { return s.id !== id; });
+                todos.forEach(function (t) { if (t.subj === id) t.subj = ''; });
+                refresh();
+            });
+            $('sjAdd').addEventListener('click', addSubj);
+            $('sjName').addEventListener('keypress', function (e) { if (e.key === 'Enter') addSubj(); });
+
+            /* ----- AI helpers (call the Supabase Edge Function; the API key never touches this page) ----- */
+            var AI_URL = 'https://wxzccndfwjozxfnphhic.supabase.co/functions/v1/ai-study';
+            var quizzes = {};
+            function aiCall(action, payload) {
+                var tok = null; try { tok = localStorage.getItem('authToken'); } catch (e) { }
+                if (!tok) return Promise.reject(new Error('invalid_session'));
+                return fetch(AI_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: tok, action: action, lang: LANG, payload: payload }) })
+                    .then(function (r) {
+                        return r.json().catch(function () { return {}; }).then(function (d) {
+                            if (!r.ok || d.error) throw new Error(d.error || ('http' + r.status));
+                            return d;
+                        });
+                    });
+            }
+            window.aiChat = function (history, context) {
+                return aiCall('chat', { messages: history, context: context }).then(function (d) { return d.reply || ''; });
+            };
+            function aiMsg(e) {
+                var c = String(e && e.message || '');
+                if (c === 'rate_limited') return L('Too many AI requests. Try again in a while.', 'طلبات كثيرة للذكاء الاصطناعي. حاول بعد قليل.');
+                if (c === 'invalid_session') return L('Please log in again.', 'سجّل دخولك من جديد.');
+                if (c === 'not_configured') return L('The AI key is not set on the server yet.', 'مفتاح الذكاء الاصطناعي غير مضبوط على الخادم بعد.');
+                if (c === 'notes_too_short') return L('Write a few more lines of notes first.', 'اكتب بعض الأسطر في الملاحظات أولًا.');
+                if (/fetch|network|Load failed/i.test(c)) return L('Cannot reach the AI service. Check that the function is deployed.', 'تعذر الوصول لخدمة الذكاء الاصطناعي. تأكد أن الدالة منشورة.');
+                return L('The AI request failed. Try again.', 'فشل طلب الذكاء الاصطناعي. حاول مرة أخرى.');
+            }
+            function quizHtml(id) {
+                var q = quizzes[id]; if (!q) return '';
+                if (q.loading) return '<div class="sj-quiz st-note">' + L('Generating questions…', 'جارٍ توليد الأسئلة…') + '</div>';
+                if (q.err) return '<div class="sj-quiz st-note" style="color:#e74c3c">' + esc(q.err) + '</div>';
+                var h = '<div class="sj-quiz">', done = 0, ok = 0;
+                q.qs.forEach(function (x, i) {
+                    var a = q.ans[i];
+                    h += '<div class="qz"><div class="qz-q">' + (i + 1) + '. ' + esc(x.question) + '</div>';
+                    x.options.forEach(function (o, j) {
+                        var cls = 'qz-o';
+                        if (a !== undefined) { if (j === x.answerIndex) cls += ' right'; else if (j === a) cls += ' wrong'; }
+                        h += '<button class="' + cls + '" data-qid="' + esc(id) + '" data-qi="' + i + '" data-oj="' + j + '"' + (a !== undefined ? ' disabled' : '') + '>' + esc(o) + '</button>';
+                    });
+                    if (a !== undefined) { done++; if (a === x.answerIndex) ok++; h += '<div class="st-sub" style="text-align:start">' + esc(x.explanation || '') + '</div>'; }
+                    h += '</div>';
+                });
+                if (done === q.qs.length) h += '<div class="st-note"><b>' + L('Score: ', 'النتيجة: ') + ok + ' / ' + q.qs.length + '</b></div>';
+                return h + '</div>';
+            }
+            function startQuiz(id) {
+                var s = subjOf(id); if (!s) return;
+                if ((s.notes || '').trim().length < 40) {
+                    quizzes[id] = { err: L('Write a few lines of notes first (at least 40 characters).', 'اكتب بعض الأسطر في الملاحظات أولًا (40 حرفًا على الأقل).') };
+                    renderSubj(true); return;
+                }
+                quizzes[id] = { loading: true }; renderSubj(true);
+                aiCall('quiz', { subject: s.name, notes: s.notes.slice(0, 8000), count: 5 }).then(function (d) {
+                    var qs = (d.questions || []).filter(function (x) {
+                        return x && x.question && Array.isArray(x.options) && x.options.length === 4 && x.answerIndex >= 0 && x.answerIndex <= 3;
+                    });
+                    quizzes[id] = qs.length ? { qs: qs, ans: [] } : { err: aiMsg(new Error('ai_failed')) };
+                }).catch(function (e) { quizzes[id] = { err: aiMsg(e) }; }).then(function () { renderSubj(true); });
+            }
+
+            /* ----- planner: rule-based (instant) or AI (Claude) ----- */
+            var lastPlan = [], planSrc = 'rule';
+            function planDate(off) { var d = new Date(); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() + off); return d; }
+            function noTasksHtml() { return '<div class="st-note">' + L('No unfinished tasks to plan.', 'لا توجد مهام غير منجزة لتخطيطها.') + '</div>'; }
+            function renderPlan(over, tips) {
+                var loc = LANG === 'ar' ? 'ar-u-nu-latn' : 'en-US', h = '', cur = -1;
+                if (tips) h += '<div class="st-note" style="text-align:start">' + esc(tips) + '</div>';
+                lastPlan.forEach(function (p) {
+                    if (p.off !== cur) { cur = p.off; h += '<div class="pl-day">' + planDate(p.off).toLocaleDateString(loc, { weekday: 'long', day: 'numeric', month: 'short' }) + '</div>'; }
+                    var sj = subjOf(p.t.subj), late = p.t.due && dayKey(planDate(p.off)) > p.t.due;
+                    h += '<div class="pl-it"><time>' + p.time + '</time><span>' + (sj ? '[' + esc(sj.name) + '] ' : '') + esc(p.t.text) + (p.min ? ' · ' + p.min + L(' min', ' د') : '') + '</span>' +
+                        (late ? '<span class="chip late">' + L('after due date', 'بعد موعد الاستحقاق') + '</span>' : '') +
+                        (p.note ? '<div class="st-sub" style="flex-basis:100%;text-align:start">' + esc(p.note) + '</div>' : '') + '</div>';
+                });
+                if (over) h += '<div class="st-note">' + L(over + ' task(s) did not fit this week. Add hours or rebuild next week.', over + ' مهمة لم تتسع هذا الأسبوع. زد الساعات أو أعد البناء الأسبوع القادم.') + '</div>';
+                $('plOut').innerHTML = h;
+            }
+            function pending() { return todos.filter(function (t) { return !t.completed; }); }
+            function build() {
+                var hrs = Math.max(0.5, +$('plHrs').value || 2), per = Math.max(10, +$('plMin').value || 45);
+                var st = ($('plStart').value || '16:00').split(':'), base = (+st[0]) * 60 + (+st[1] || 0);
+                var cap = Math.max(1, Math.floor(hrs * 60 / per)), P = { high: 0, medium: 1, low: 2 };
+                var pend = pending().sort(function (a, b) {
+                    var x = a.due || '9999', y = b.due || '9999'; if (x !== y) return x < y ? -1 : 1;
+                    return (a.priority in P ? P[a.priority] : 2) - (b.priority in P ? P[b.priority] : 2);
+                });
+                lastPlan = []; planSrc = 'rule'; var over = 0;
+                pend.forEach(function (t, i) {
+                    var off = Math.floor(i / cap); if (off > 6) { over++; return; }
+                    var m = base + (i % cap) * per;
+                    lastPlan.push({ t: t, off: off, time: pad2(Math.floor(m / 60) % 24) + ':' + pad2(m % 60), min: per });
+                });
+                if (!pend.length) { $('plOut').innerHTML = noTasksHtml(); return; }
+                renderPlan(over, '');
+            }
+            function buildAI() {
+                var pend = pending().slice(0, 40), btn = $('plAI');
+                if (!pend.length) { $('plOut').innerHTML = noTasksHtml(); return; }
+                btn.disabled = true;
+                $('plOut').innerHTML = '<div class="st-note">' + L('Claude is building your plan…', 'جارٍ بناء خطتك بالذكاء الاصطناعي…') + '</div>';
+                aiCall('plan', {
+                    today: dayKey(), hoursPerDay: +$('plHrs').value || 2, minutesPerTask: +$('plMin').value || 45, startTime: $('plStart').value || '16:00',
+                    tasks: pend.map(function (t) { var sj = subjOf(t.subj); return { id: String(t.id), text: String(t.text).slice(0, 200), subject: sj ? sj.name : '', due: t.due || '', priority: t.priority || 'low' }; })
+                }).then(function (d) {
+                    var byId = {}, used = {}; pend.forEach(function (t) { byId[String(t.id)] = t; });
+                    lastPlan = [];
+                    (d.items || []).forEach(function (it) {
+                        var t = byId[String(it.taskId)];
+                        if (!t || used[it.taskId] || !(it.day >= 0 && it.day <= 6) || !/^\d{2}:\d{2}$/.test(it.time)) return;
+                        used[it.taskId] = 1;
+                        lastPlan.push({ t: t, off: it.day | 0, time: it.time, min: it.minutes | 0, note: String(it.note || '').slice(0, 160) });
+                    });
+                    lastPlan.sort(function (a, b) { return a.off - b.off || (a.time < b.time ? -1 : 1); });
+                    planSrc = 'ai';
+                    renderPlan(pend.length - lastPlan.length, d.tips || '');
+                }).catch(function (e) {
+                    $('plOut').innerHTML = '<div class="st-note" style="color:#e74c3c">' + esc(aiMsg(e)) + '</div>';
+                }).then(function () { btn.disabled = false; });
+            }
+            function applyPlan() {
+                if (planSrc === 'rule' || !lastPlan.length) build();
+                for (var d = 0; d < 7; d++) sched[d] = sched[d].filter(function (x) { return !(x.auto && !x.done); });
+                lastPlan.forEach(function (p, i) {
+                    var sj = subjOf(p.t.subj);
+                    sched[planDate(p.off).getDay()].push({ id: Date.now() + i, text: (sj ? '[' + sj.name + '] ' : '') + p.t.text, time: p.time, done: false, auto: true });
+                });
+                saveSched(); renderSchedule(); renderSession();
+                $('plOut').insertAdjacentHTML('afterbegin', '<div class="st-note" style="text-align:start">' + L('Added to your Schedule tab. Rebuild any time to adjust it after falling behind.', 'تمت الإضافة إلى تبويب الجدول. أعد البناء في أي وقت لتعديلها إذا تأخرت.') + '</div>');
+            }
+            $('plBuild').addEventListener('click', build);
+            $('plAI').addEventListener('click', buildAI);
+            $('plApply').addEventListener('click', applyPlan);
+
+            /* ----- overdue reminders ----- */
+            function overdue() { var td = dayKey(); return todos.filter(function (t) { return !t.completed && t.due && t.due < td; }); }
+            function odText(o) {
+                var n = o.length, names = o.slice(0, 3).map(function (t) { return t.text; }).join(LANG === 'ar' ? '، ' : ', ');
+                return L(n + ' overdue task' + (n > 1 ? 's' : '') + ': ', n + ' مهمة متأخرة: ') + names + (n > 3 ? '…' : '');
+            }
+            function renderOd() {
+                var o = overdue(), b = $('odBox');
+                if (!o.length) { b.style.display = 'none'; return; }
+                b.style.display = ''; b.textContent = odText(o);
+            }
+            setTimeout(function () {
+                var o = overdue(), td = dayKey(), f = null;
+                try { f = localStorage.getItem('odFired'); } catch (e) { }
+                if (!o.length || f === td || (typeof nset !== 'undefined' && nset.daily === false)) return;
+                notify(L('Overdue tasks', 'مهام متأخرة'), odText(o));
+                try { localStorage.setItem('odFired', td); } catch (e) { }
+            }, 2500);
+
+            var _u2 = window.updateStats;
+            window.updateStats = function () { _u2.apply(this, arguments); renderOd(); renderSubj(); };
+            window.renderSubj = function () { renderSubj(); renderOd(); };
+            renderSubj(); renderOd();
+        })();
+
+        renderSchedule();
+        applyLang(LANG);
+        setTimeout(checkNotifs, 1500);
+        setInterval(checkNotifs, 30000);
+    </script>
+     <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="appshell.css">
+    <script src="auth.js"></script>
+    <script src="appshell.js"></script>
+</body>
+
+</html>

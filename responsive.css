@@ -1,0 +1,168 @@
+/* ===== Responsive layer for Focusly =====
+   Load AFTER the main <style> block (right before </head>). */
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+img, svg, video { max-width: 100%; }
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+}
+.container {
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
+  overscroll-behavior: contain;
+}
+
+/* ---------- Large screens ---------- */
+@media (min-width: 1400px) {
+  .container { max-width: 1200px; padding: 48px; }
+}
+
+/* ---------- Tablets ---------- */
+@media (max-width: 900px) {
+  .container { padding: 28px; }
+  h1 { font-size: 2em; }
+  .flip-card { max-height: 30vh; }
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 600px) {
+  body { padding: 8px; align-items: stretch; }
+  .container {
+    padding: 16px 14px 90px; /* bottom space for the chat button */
+    border-radius: 16px;
+    max-height: none;
+    height: calc(100dvh - 16px);
+  }
+
+  /* Header */
+  .header { grid-template-columns: 1fr auto; gap: 8px; margin-bottom: 14px; }
+  .header::before { display: none; }
+  .header-text { text-align: start; grid-column: 1; grid-row: 1; }
+  .header-tools { grid-column: 2; grid-row: 1; gap: 6px; }
+  h1 { font-size: 1.45em; margin-bottom: 2px; }
+  .subtitle { font-size: .8em; }
+  .lang-btn { height: 40px; padding: 0 12px; font-size: 13px; }
+  .theme-toggle { width: 40px; height: 40px; font-size: 19px; }
+
+  /* Tabs: 2 x 2 grid */
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+  .tab-btn { padding: 10px 6px; font-size: 14px; }
+  .tab-btn:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+  /* Statistics */
+  .st-grid { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .st-card { padding: 12px 8px; }
+  .st-val { font-size: 1.3em; }
+  .st-chart-box { padding: 12px 8px; }
+
+  /* Stats */
+  .stats { padding: 14px 8px; margin-bottom: 18px; }
+  .stat-number { font-size: 1.5em; }
+  .stat-label { font-size: .75em; }
+
+  /* Tasks */
+  .input-container { flex-direction: column; }
+  #todoInput { padding: 13px 16px; }
+  .btn { padding: 13px 20px; }
+  .filter-buttons { gap: 6px; }
+  .filter-btn { padding: 9px 4px; font-size: 13px; }
+  .sort-container { flex-wrap: wrap; gap: 8px; }
+  .todo-list { max-height: none; overflow: visible; }
+  .todo-item { padding: 12px; gap: 10px; flex-wrap: wrap; }
+  .todo-content { flex-basis: calc(100% - 44px); }
+  .todo-actions { width: 100%; justify-content: flex-end; }
+  .btn-edit, .btn-delete { padding: 9px 16px; }
+
+  /* Timer */
+  .timer-box { padding: 18px 12px; }
+  .mode-switch { margin-bottom: 16px; }
+  .mode-btn { flex: 1; padding: 9px 10px; }
+  .flip-clock { gap: 8px; }
+  .flip-card { max-height: 26vh; }
+  .flip-digit { font-size: clamp(48px, 20vw, 110px); letter-spacing: 1px; }
+  .time-inputs { gap: 8px; }
+  .time-inputs input { width: 64px; }
+  .timer-controls { flex-wrap: wrap; gap: 8px; }
+  .timer-controls .btn { flex: 1 1 calc(50% - 8px); padding: 12px 10px; }
+  .skip-row { gap: 6px; }
+  .timer-opts { padding: 14px; }
+  .opt-row { gap: 10px; }
+  #optVol { width: 100%; flex-basis: 100%; }
+  .session { padding: 14px; }
+  .session-src { gap: 6px; }
+
+  /* Focus (zoom) mode */
+  .timer-box.focus { padding: 14px; gap: 14px; overflow-y: auto; justify-content: flex-start; padding-top: max(14px, env(safe-area-inset-top)); }
+  .timer-box.focus .flip-card { max-width: 30vw; max-height: 36vh; }
+  .timer-box.focus .flip-digit { font-size: clamp(54px, 22vw, 150px); }
+
+  /* Translator */
+  .tr-langs { gap: 6px; }
+  .tr-langs select { padding: 10px 8px; }
+  .swap-btn { width: 40px; height: 40px; }
+  .tr-actions { flex-wrap: wrap; }
+  .tr-actions .btn { flex: 1 1 calc(50% - 10px); padding: 12px 10px; }
+  .tr-actions .btn-add { flex-basis: 100%; }
+  .tr-result { padding: 14px; }
+  .tr-text { font-size: 1.3em; }
+  .voice-row { flex-wrap: wrap; gap: 8px; }
+  .voice-row label { width: 100%; }
+
+  /* Schedule: each day becomes a stacked card */
+  .notif-box { padding: 14px; }
+  .notif-top .label-muted { min-width: 100%; }
+  .sch-add > * { flex: 1 1 100%; }
+  .sch-add .chk { flex-basis: 100%; }
+  .sch-wrap { overflow: visible; border: 0; }
+  .sch-table, .sch-table tbody, .sch-table tr, .sch-table th, .sch-table td { display: block; width: 100%; }
+  .sch-table tr { border: 2px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 10px; }
+  .sch-table th.day { width: 100%; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .sch-table th.today small { display: inline; }
+  .sch-table td { border: 0; padding: 10px 12px; }
+  .sch-table td.count { display: none; }
+  .sch-task { width: 100%; }
+
+  /* Chatbot */
+  #chatbot-widget { bottom: max(14px, env(safe-area-inset-bottom)); inset-inline-start: 14px; left: 14px; }
+  #chatbot-toggle { width: 52px; height: 52px; }
+  #chatbot-panel { width: calc(100vw - 28px); }
+  #chatbot-messages { height: 50vh; max-height: 340px; }
+}
+
+/* ---------- Very small phones ---------- */
+@media (max-width: 360px) {
+  .container { padding: 14px 10px 90px; }
+  .tab-btn { font-size: 13px; }
+  .flip-digit { font-size: clamp(42px, 19vw, 80px); }
+  .time-inputs input { width: 56px; font-size: 18px; }
+}
+
+/* ---------- Phones in landscape / short screens ---------- */
+@media (max-height: 520px) and (orientation: landscape) {
+  body { align-items: flex-start; }
+  .container { max-height: calc(100dvh - 16px); padding: 16px 20px; }
+  .flip-card { max-height: 44vh; }
+
+  .timer-box.focus { flex-direction: column; justify-content: center; gap: 10px; overflow-y: auto; }
+  .timer-box.focus .flip-card { max-height: 52vh; }
+  .timer-box.focus .flip-digit { font-size: clamp(50px, 34vh, 220px); }
+  .timer-box.focus .session { display: none; }
+  .timer-box.focus .phase { font-size: 15px; }
+}
+
+/* ---------- Touch devices: bigger tap targets, no iOS zoom on focus ---------- */
+@media (pointer: coarse) {
+  input[type=text], input[type=number], input[type=time], select, textarea { font-size: 16px !important; }
+  .btn, .btn-edit, .btn-delete, .src-btn, .sort-btn, .priority-btn, .filter-btn, .mode-btn { min-height: 42px; }
+  .checkbox { width: 28px; height: 28px; }
+  .remove-btn { padding: 4px 8px; font-size: 22px; }
+  .icon-btn { width: 42px; height: 42px; }
+  .todo-item:hover, .btn-add:hover, .btn-start:hover, .btn-reset:hover { transform: none; }
+}
+
+/* ---------- Make sure nothing ever scrolls sideways ---------- */
+.container, .tab-panel { overflow-x: hidden; }
+.todo-text, .tr-text, .session-item .todo-text { overflow-wrap: anywhere; }
